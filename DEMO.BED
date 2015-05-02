@@ -1,0 +1,2482 @@
+//*********************************************************************
+//* Program   : DEMO.BED                                              *
+//* Author    : Forrest Bentley                                       *
+//* Date      : 08/17/92                                              *
+//* Desc      : This Routine Will Show Off Some Of The                *
+//*             Capabilities Of B-edit(pm).                           *
+//*********************************************************************
+ 
+    //***********************************
+    //* Working Storage Variables       *
+    //***********************************
+ 
+    logfile null
+//  logfile DEMO.LOG
+    string  Currdir
+    string  MainWindow
+    string  Focus
+    string  FocusWin
+    string  Message
+    string  FontName          = "Testing"
+    string  EntryHWND
+    string  Sound             = 'y'
+    integer Count             = 0
+    integer Result
+    integer Integer1
+    integer Integer2
+    dollar  DollarResult
+    dollar  Dollar1
+    dollar  Dollar2
+    string  TestDollar
+    string  SizeMove          = 'n'
+    integer SizeLoc           = 20
+    integer SizeDir           = 10
+    string  Userbutton        = "min"
+    integer Chartpos
+    integer Chartdata
+    string  Hold_Button
+    integer Index
+    integer Selected
+    integer Selected2
+
+    string  PaintData
+    string  PaintPosData = "COLOR RED TEXTURE SOLID SHAPE "
+    string  PaintPosDataUndo = PaintPosData
+    string  Xpos
+    string  Ypos
+    string  Cxpos
+    string  Cypos
+    integer Points
+    integer PointsUndo
+    string  PaintOK
+    string  Drag
+
+    integer WindowBannerSize  = 85
+    string  WindowBannerColor = "blue"
+    string  WindowBannerLine1 = "Forrest Bentley"
+    string  WindowBannerLine2 = "  B-Edit (PM)"
+    string  WindowBannerLine3 = " Demonstration"
+
+    string  MainDraw
+    MainDraw = "@MainDraw@ COLOR RED"
+    MainDraw = "@MainDraw@ TEXTURE SOLID"
+    MainDraw = "@MainDraw@ SHAPE 30 270 30 275 560 275 560 270 END"
+
+    string  Demo_Draw_Data
+    string  Demo_Draw_Data2
+
+    string  Demo_Chart_Draw
+    string  Demo_Chart_Type = "Bar"
+    integer Chart_Var1
+    integer Chart_Var2
+    integer Chart_Var3
+ 
+    //***********************************
+    //* Special Actions                 *
+    //***********************************
+ 
+    string WindowInit                             = "call !a100_WindowInit"
+    string WindowWrap                             = "call !a100_WindowWrap"
+    string WindowTimer                            = "call !a100_WindowTimer"
+    string WindowF1                               = "call !a100_WindowF1"
+    string WindowF2                               = "call !a100_WindowF2"
+    string WindowF3                               = "call !a100_WindowF3"
+    string WindowF4                               = "call !a100_WindowF4"
+    string WindowF5                               = "call !a100_WindowF5"
+    string WindowF6                               = "call !a100_WindowF6"
+    string WindowF7                               = "call !a100_WindowF7"
+    string WindowF8                               = "call !a100_WindowF8"
+    string WindowF9                               = "call !a100_WindowF9"
+    string WindowF10                              = "call !a100_WindowF10"
+    string WindowF11                              = "call !a100_WindowF11"
+    string WindowF12                              = "call !a100_WindowF12"
+    string WindowInsert                           = "call !a100_WindowInsert"
+    string WindowDelete                           = "call !a100_WindowDelete"
+    string WindowDown1                            = "call !a100_WindowDown1"
+    string WindowDown2                            = "call !a100_WindowDown2"
+    string WindowUp2                              = "call !a100_WindowUp2"
+//    string WindowMouse                            = "call !a100_WindowMouse"
+ 
+    //***********************************
+    //* Menu Selection Actions          *
+    //***********************************
+    string Demo_Main_Timer_MSOBJ                  = "call !a110_Demo_Main_Timer_MSOBJ"
+    string Demo_Main_Message_MSOBJ                = "call !a110_Demo_Main_Message_MSOBJ"
+    string Demo_Main_Font_MSOBJ                   = "call !a110_Demo_Main_Font_MSOBJ"
+    string Demo_Main_Sound_MSOBJ                  = "call !a110_Demo_Main_Sound_MSOBJ"
+    string Demo_Main_Protect_MSOBJ                = "call !a110_Demo_Main_Protect_MSOBJ"
+    string Demo_Main_Math_MSOBJ                   = "call !a110_Demo_Main_Math_MSOBJ"
+    string Demo_Main_Edit_MSOBJ                   = "call !a110_Demo_Main_Edit_MSOBJ"
+    string Demo_Main_Size_MSOBJ                   = "call !a110_Demo_Main_Size_MSOBJ"
+    string Demo_Main_Search_MSOBJ                 = "call !Demo_Main_Search_MSOBJ"
+    string Demo_Main_Bitmap_MSOBJ                 = "call !a110_Demo_Main_Bitmap_MSOBJ"
+    string Demo_Main_Chart_MSOBJ                  = "call !a110_Demo_Main_Chart_MSOBJ"
+    string Demo_Main_Objects_MSOBJ                = "call !a110_Demo_Main_Objects_MSOBJ"
+    string Demo_Main_Exit_MSOBJ                   = "call !a110_Demo_Main_Exit_MSOBJ"
+    string Demo_Main_Headingoff_MSOBJ             = "call !a110_Demo_Main_Headingoff_MSOBJ"
+    string Demo_Main_Headingon_MSOBJ              = "call !a110_Demo_Main_Headingon_MSOBJ"
+    string Demo_Main_About_MSOBJ                  = "call !a110_Demo_Main_About_MSOBJ"
+    string Demo_Main_Draw_MSOBJ                   = "call !a110_Demo_Main_Draw_MSOBJ"
+    string Demo_Main_Paint_MSOBJ                  = "call !a110_Demo_Main_Paint_MSOBJ"
+ 
+    //***********************************
+    //* Window Button Actions           *
+    //***********************************
+    string Demo_Message_OK_PBOBJ                  = "call !a120_Demo_Message_OK_PBOBJ"
+    string Demo_Message_Cancel_PBOBJ              = "call !a120_Demo_Message_Cancel_PBOBJ"
+
+    string Demo_Font_Cancel_PBOBJ                 = "call !a120_Demo_Font_Cancel_PBOBJ"
+    string Demo_Font_CDefault_RBOBJ               = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_CDefault_RBOBJ
+    string Demo_Font_CWhite_RBOBJ                 = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_CWhite_RBOBJ
+    string Demo_Font_CBlack_RBOBJ                 = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_CBlack_RBOBJ
+    string Demo_Font_CBlue_RBOBJ                  = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_CBlue_RBOBJ
+    string Demo_Font_CRed_RBOBJ                   = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_CRed_RBOBJ
+    string Demo_Font_CGreen_RBOBJ                 = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_CGreen_RBOBJ
+    string Demo_Font_CCyan_RBOBJ                  = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_CCyan_RBOBJ
+
+    string Demo_Font_BDefault_RBOBJ               = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_BDefault_RBOBJ
+    string Demo_Font_BWhite_RBOBJ                 = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_BWhite_RBOBJ
+    string Demo_Font_BBlack_RBOBJ                 = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_BBlack_RBOBJ
+    string Demo_Font_BBlue_RBOBJ                  = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_BBlue_RBOBJ
+    string Demo_Font_BRed_RBOBJ                   = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_BRed_RBOBJ
+    string Demo_Font_BGreen_RBOBJ                 = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_BGreen_RBOBJ
+    string Demo_Font_BCyan_RBOBJ                  = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_BCyan_RBOBJ
+
+    string Demo_Font_FDefault_RBOBJ               = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_FDefault_RBOBJ
+    string Demo_Font_F12Helv_RBOBJ                = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_F12Helv_RBOBJ
+    string Demo_Font_F14Times_RBOBJ               = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_F14Times_RBOBJ
+    string Demo_Font_F24Times_RBOBJ               = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_F24Times_RBOBJ
+    string Demo_Font_F8Courier_RBOBJ              = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_F8Courier_RBOBJ
+    string Demo_Font_F12Courier_RBOBJ             = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_F12Courier_RBOBJ
+    string Demo_Font_F10Fixed_RBOBJ               = "call !c100_Demo_Font_Setup"
+    window action Demo_Font_F10Fixed_RBOBJ
+
+    string Demo_Timer_Cancel_PBOBJ                = "call !a120_Demo_Timer_Cancel_PBOBJ"
+    string Demo_Timer_Off_RBOBJ                   = "call !b100_Demo_Timer_Setup"
+    window action Demo_Timer_Off_RBOBJ
+    string Demo_Timer_1/2_RBOBJ                   = "call !b100_Demo_Timer_Setup"
+    window action Demo_Timer_1/2_RBOBJ
+    string Demo_Timer_1_RBOBJ                     = "call !b100_Demo_Timer_Setup"
+    window action Demo_Timer_1_RBOBJ
+    string Demo_Timer_5_RBOBJ                     = "call !b100_Demo_Timer_Setup"
+    window action Demo_Timer_5_RBOBJ
+    string Demo_Timer_10_RBOBJ                    = "call !b100_Demo_Timer_Setup"
+    window action Demo_Timer_10_RBOBJ
+    string Demo_Timer_60_RBOBJ                    = "call !b100_Demo_Timer_Setup"
+    window action Demo_Timer_60_RBOBJ
+
+    string Demo_Paint_On_RBOBJ                    = "call !c100_Demo_Paint_Mouse"
+    window action Demo_Paint_On_RBOBJ
+    string Demo_Paint_Off_RBOBJ                   = "call !c100_Demo_Paint_Mouse"
+    window action Demo_Paint_Off_RBOBJ
+
+    string Demo_Sound_Cancel_PBOBJ                = "call !a120_Demo_Sound_Cancel_PBOBJ"
+    string Demo_Sound_Bell_PBOBJ                  = "call !a120_Demo_Sound_Bell_PBOBJ"
+    string Demo_Sound_Music_PBOBJ                 = "call !a120_Demo_Sound_Music_PBOBJ"
+    string Demo_Sound_C1_PBOBJ                    = "call !s100_C1"
+    string Demo_Sound_D1_PBOBJ                    = "call !s100_D1"
+    string Demo_Sound_E1_PBOBJ                    = "call !s100_E1"
+    string Demo_Sound_F1_PBOBJ                    = "call !s100_F1"
+    string Demo_Sound_G1_PBOBJ                    = "call !s100_G1"
+    string Demo_Sound_A1_PBOBJ                    = "call !s100_A1"
+    string Demo_Sound_B1_PBOBJ                    = "call !s100_B1"
+    string Demo_Sound_C2_PBOBJ                    = "call !s100_C2"
+    string Demo_Sound_C1S_PBOBJ                   = "call !s100_C1S"
+    string Demo_Sound_D1S_PBOBJ                   = "call !s100_D1S"
+    string Demo_Sound_F1S_PBOBJ                   = "call !s100_F1S"
+    string Demo_Sound_G1S_PBOBJ                   = "call !s100_G1S"
+    string Demo_Sound_A1S_PBOBJ                   = "call !s100_A1S"
+    string Demo_Music_Play_PBOBJ                  = "call !a120_Demo_Music_Play_PBOBJ"
+    string Demo_Music_Cancel_PBOBJ                = "call !a120_Demo_Music_Cancel_PBOBJ"
+    string Demo_Music_Clear_PBOBJ                 = "call !a120_Demo_Music_Clear_PBOBJ"
+    string Demo_Music_Insert_PBOBJ                = "call !a120_Demo_Music_Insert_PBOBJ"
+    string Demo_Music_Modify_PBOBJ                = "call !a120_Demo_Music_Modify_PBOBJ"
+    string Demo_Music_Delete_PBOBJ                = "call !a120_Demo_Music_Delete_PBOBJ"
+    string Demo_Music_Test_PBOBJ                  = "call !a120_Demo_Music_Test_PBOBJ"
+    string Demo_Music_Keep_PBOBJ                  = "call !a120_Demo_Music_Keep_PBOBJ"
+    string Demo_Music_List_LBOBJ                  = "window push Demo_Music_Modify_PBOBJ"
+    window action Demo_Music_List_LBOBJ
+
+    string Demo_Math_Cancel_PBOBJ                = "call !a120_Demo_Math_Cancel_PBOBJ"
+    string Demo_Math_Integer1_EFOBJ              = "call !a130_Demo_Math_Integer_EFOBJ"
+    window action Demo_Math_Integer1_EFOBJ
+    window edit Demo_Math_Integer1_EFOBJ numeric 10
+    string Demo_Math_Integer2_EFOBJ              = "call !a130_Demo_Math_Integer_EFOBJ"
+    window action Demo_Math_Integer2_EFOBJ
+    window edit Demo_Math_Integer2_EFOBJ numeric 10
+
+    string Demo_Math_Dollar1_EFOBJ              = "call !a130_Demo_Math_Dollar_EFOBJ"
+    window action Demo_Math_Dollar1_EFOBJ
+    window edit Demo_Math_Dollar1_EFOBJ dollar 10
+    string Demo_Math_Dollar2_EFOBJ              = "call !a130_Demo_Math_Dollar_EFOBJ"
+    window action Demo_Math_Dollar2_EFOBJ
+    window edit Demo_Math_Dollar2_EFOBJ dollar 10
+
+    string Demo_Protect_Cancel_PBOBJ             = "call !a120_Demo_Protect_Cancel_PBOBJ"
+    string Demo_Protect_Disable_PBOBJ            = "call !a120_Demo_Protect_Disable_PBOBJ"
+    string Demo_Protect_Enable_PBOBJ             = "call !a120_Demo_Protect_Enable_PBOBJ"
+    string Demo_Protect_Hide_PBOBJ               = "call !a120_Demo_Protect_Hide_PBOBJ"
+    string Demo_Protect_Show_PBOBJ               = "call !a120_Demo_Protect_Show_PBOBJ"
+    string Demo_Protect_Password_EFOBJ
+
+    string Demo_Draw_Cancel_PBOBJ                = "call !a120_Demo_Draw_Cancel_PBOBJ"
+    string Demo_Draw_Hide_PBOBJ                  = "call !a120_Demo_Draw_Hide_PBOBJ"
+    string Demo_Draw_Show_PBOBJ                  = "call !a120_Demo_Draw_Show_PBOBJ"
+
+    string Demo_Paint_Red_PBOBJ                   = "call !a120_Demo_Paint_Red_PBOBJ"
+    string Demo_Paint_Green_PBOBJ                 = "call !a120_Demo_Paint_Green_PBOBJ"
+    string Demo_Paint_Blue_PBOBJ                  = "call !a120_Demo_Paint_Blue_PBOBJ"
+    string Demo_Paint_Erase_PBOBJ                 = "call !a120_Demo_Paint_Erase_PBOBJ"
+    string Demo_Paint_Cancel_PBOBJ                = "call !a120_Demo_Paint_Cancel_PBOBJ"
+    string Demo_Paint_Undo_PBOBJ                  = "call !a120_Demo_Paint_Undo_PBOBJ"
+
+    string Demo_Edit_Cancel_PBOBJ                = "call !a120_Demo_Edit_Cancel_PBOBJ"
+    string Demo_Edit_Text_EFOBJ                  = "call !z999_return"
+    window action Demo_Edit_Text_EFOBJ
+    window edit Demo_Edit_Text_EFOBJ text 20
+    string Demo_Edit_Alpha_EFOBJ                 = "call !z999_return"
+    window action Demo_Edit_Alpha_EFOBJ
+    window edit Demo_Edit_Alpha_EFOBJ alpha 20
+    string Demo_Edit_Numeric_EFOBJ               = "call !z999_return"
+    window action Demo_Edit_Numeric_EFOBJ
+    window edit Demo_Edit_Numeric_EFOBJ numeric 8
+    string Demo_Edit_Upper_EFOBJ                 = "call !z999_return"
+    window action Demo_Edit_Upper_EFOBJ
+    window edit Demo_Edit_Upper_EFOBJ upper 20
+    string Demo_Edit_Lower_EFOBJ                 = "call !z999_return"
+    window action Demo_Edit_Lower_EFOBJ
+    window edit Demo_Edit_Lower_EFOBJ lower 20
+    string Demo_Edit_Mixed_EFOBJ                 = "call !z999_return"
+    window action Demo_Edit_Mixed_EFOBJ
+    window edit Demo_Edit_Mixed_EFOBJ mix 20
+    string Demo_Edit_Date_EFOBJ                  = "call !z999_return"
+    window action Demo_Edit_Date_EFOBJ
+    window edit Demo_Edit_Date_EFOBJ date 10
+    string Demo_Edit_Dollar_EFOBJ                = "call !z999_return"
+    window action Demo_Edit_Dollar_EFOBJ
+    window edit Demo_Edit_Dollar_EFOBJ dollar 8
+    string Demo_Edit_Telephone_EFOBJ             = "call !z999_return"
+    window action Demo_Edit_Telephone_EFOBJ
+    window edit Demo_Edit_Telephone_EFOBJ telephone 14
+
+    string Demo_Size_Cancel_PBOBJ                = "call !a120_Demo_Size_Cancel_PBOBJ"
+    string Demo_Size_Small_PBOBJ                 = "call !a120_Demo_Size_Small_PBOBJ"
+    string Demo_Size_Medium_PBOBJ                = "call !a120_Demo_Size_Medium_PBOBJ"
+    string Demo_Size_Large_PBOBJ                 = "call !a120_Demo_Size_Large_PBOBJ"
+
+    string Demo_Select_OK_PBOBJ             = "call !Demo_Select_OK_PBOBJ"
+    string Demo_Select_Cancel_PBOBJ         = "call !Demo_Select_Cancel_PBOBJ"
+    string Demo_Select_File_EFOBJ
+    window edit Demo_Select_File_EFOBJ TEXT 100
+
+    string Demo_Search_OK_PBOBJ             = "call !Demo_Search_OK_PBOBJ"
+    string Demo_Search_Cancel_PBOBJ         = "call !Demo_Search_Cancel_PBOBJ"
+    string Demo_Search_File_EFOBJ
+    window edit Demo_Search_File_EFOBJ TEXT 100
+
+    string Demo_Bitmap_Cancel_PBOBJ              = "call !a120_Demo_Bitmap_Cancel_PBOBJ"
+    string Demo_Bitmap_Disable_PBOBJ             = "call !a120_Demo_Bitmap_Disable_PBOBJ"
+    string Demo_Bitmap_Enable_PBOBJ              = "call !a120_Demo_Bitmap_Enable_PBOBJ"
+    string Demo_Bitmap_Next_PBOBJ                = "call !a120_Demo_Bitmap_Next_PBOBJ"
+    string Demo_Bitmap_User_UDOBJ                = "call !a120_Demo_Bitmap_User_UDOBJ"
+    string Demo_Bitmap_User2_UDOBJ               = "call !a120_Demo_Bitmap_User2_UDOBJ"
+    string Demo_Bitmap_User3_UDOBJ               = "call !a120_Demo_Bitmap_User3_UDOBJ"
+    window bitmap Demo_Bitmap_User_UDOBJ @Userbutton
+
+    string Demo_Chart_Cancel_PBOBJ               = "call !a120_Demo_Chart_Cancel_PBOBJ"
+    string Demo_Chart_Bar_PBOBJ                  = "call !a120_Demo_Chart_Bar_PBOBJ"
+    string Demo_Chart_Line_PBOBJ                 = "call !a120_Demo_Chart_Line_PBOBJ"
+    string Demo_Chart_Graph_PBOBJ                = "call !a120_Demo_Chart_Graph_PBOBJ"
+    string Demo_Chart_Var1_EFOBJ                 = "call !a130_Demo_Chart_Var1_EFOBJ"
+    window action Demo_Chart_Var1_EFOBJ
+    window edit Demo_Chart_Var1_EFOBJ numeric 3
+    string Demo_Chart_Var2_EFOBJ                 = "call !a130_Demo_Chart_Var2_EFOBJ"
+    window action Demo_Chart_Var2_EFOBJ
+    window edit Demo_Chart_Var2_EFOBJ numeric 3
+    string Demo_Chart_Var3_EFOBJ                 = "call !a130_Demo_Chart_Var3_EFOBJ"
+    window action Demo_Chart_Var3_EFOBJ
+    window edit Demo_Chart_Var3_EFOBJ numeric 3
+
+    string Demo_Fields_Cancel_PBOBJ              = "call !a120_Demo_Fields_Cancel_PBOBJ"
+    string Demo_Fields_Disable_PBOBJ             = "call !a120_Demo_Fields_Disable_PBOBJ"
+    string Demo_Fields_Enable_PBOBJ              = "call !a120_Demo_Fields_Enable_PBOBJ"
+    string Demo_Fields_Push_PBOBJ                = "call !a120_Demo_Fields_Push_PBOBJ"
+    string Demo_Fields_User_UDOBJ                = "call !a120_Demo_Fields_User_UDOBJ"
+    string Demo_Fields_List_LBOBJ                = "call !a120_Demo_Fields_List_LBOBJ"
+    window selectaction Demo_Fields_List_LBOBJ
+    string Demo_Fields_Multilist_LBOBJ           = "call !a120_Demo_Fields_Multilist_LBOBJ"
+    window action Demo_Fields_Multilist_LBOBJ
+
+    string Demo_Music_Note_EFOBJ                 = 'call !a130_Demo_Music_Note_EFOBJ'
+    window action Demo_Music_Note_EFOBJ
+    window edit Demo_Music_Note_EFOBJ ZERO 5
+    string Demo_Music_Duration_EFOBJ             = 'call !a130_Demo_Music_Duration_EFOBJ'
+    window action Demo_Music_Duration_EFOBJ
+    window edit Demo_Music_Duration_EFOBJ ZERO 5
+
+    //***********************************
+    //* Field Edits                     *
+    //***********************************
+ 
+    string Demo_Font_Entry_EFOBJ                  = "call !a130_Demo_Font_Entry_EFOBJ"
+    window action Demo_Font_Entry_EFOBJ
+    window edit Demo_Font_Entry_EFOBJ TEXT 32
+ 
+//******************************************
+//* Main Process                           *
+//******************************************
+    string Status error
+
+    string WINFILE error
+    WINFILE = "demo.win"
+    Status = "Good"
+    open WindowFile @WINFILE error Status = "BAD" 
+    if  (Status = "BAD")
++       WINFILE = "w:\applic\bedit\demo.win" 
++       open WindowFile @WINFILE error print:"Unable to read DEMO.WIN" exit
++   endif
+
+    string MNUFILE error
+    MNUFILE = "demo.mnu"
+    Status = "Good"
+    open MenuFile @MNUFILE error Status = "BAD" 
+    if  (Status = "BAD")
++       MNUFILE = "w:\applic\bedit\demo.mnu" 
++       open MenuFile @MNUFILE error print:"Unable to read DEMO.MNU" exit
++   endif
+
+    open temp null
+    systemcurr:"dir"
+    b
+    fs:/Directory of /
+    if  (eof)
++       print:"Unable to locate Directory of in DIR"
++       exit
++   endif
+    scan:/@line/:/Directory of /
+    Currdir = "@right@\"
+    pack Currdir
+    close temp
+
+    //*************************
+    //* Main Window Loop      *
+    //*************************
+    window start
+ 
+    print:"Processing Complete.
+    exit
+ 
+//*********************************************************************
+//* System PM Action Logic                                            *
+//*********************************************************************
+ 
+//******************************************
+//* Main Window Initialization Routine     *
+//******************************************
+!a100_WindowInit
+//    trace=log
+    window timer on 1
+    Demo_Timer_Off_RBOBJ = 'Y'
+    return
+ 
+//******************************************
+//* Main Window Wrapup Routine             *
+//******************************************
+!a100_WindowWrap
+    return
+ 
+//******************************************
+//* Timer Routine                          *
+//******************************************
+!a100_WindowTimer
+    if  (!Demo_Timer_Off_RBOBJ)
++       bell
++   endif
+    MainWindow = "B-Edit(PM) Demonstration System - [@date@ @time@]"
+    window title MainWindow
+    if  (SizeMove)
++       SizeLoc = SizeLoc + SizeDir
++       window size Demo_Size_Cancel_PBOBJ @SizeLoc 20 80 35
++       if  (SizeLoc > 180) or (SizeLoc < 20)
++           SizeDir = SizeDir * -1
++   endif
+    return
+ 
+//******************************************
+//* F1 processing                          *
+//******************************************
+!a100_WindowF1
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F1 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F2 processing                          *
+//******************************************
+!a100_WindowF2
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F2 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F3 processing                          *
+//******************************************
+!a100_WindowF3
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F3 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F4 processing                          *
+//******************************************
+!a100_WindowF4
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F4 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F5 processing                          *
+//******************************************
+!a100_WindowF5
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F5 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F6 processing                          *
+//******************************************
+!a100_WindowF6
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F6 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F7 processing                          *
+//******************************************
+!a100_WindowF7
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F7 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F8 processing                          *
+//******************************************
+!a100_WindowF8
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F8 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F9 processing                          *
+//******************************************
+!a100_WindowF9
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F9 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F10 processing                         *
+//******************************************
+!a100_WindowF10
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F10 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F11 processing                         *
+//******************************************
+!a100_WindowF11
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F11 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* F12 processing                         *
+//******************************************
+!a100_WindowF12
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "F12 pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* Insert processing                      *
+//******************************************
+!a100_WindowInsert
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "INSERT pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+
+//******************************************
+//* Delete processing                      *
+//******************************************
+!a100_WindowDelete
+    window getfocus Focus
+    window getfocuswin FocusWin
+    message = "DELETE pressed in Window [@FocusWin@] Field [@Focus@]"
+    window message info ok
+    return
+ 
+//******************************************
+//* Mouse Button 1 Down                    *
+//******************************************
+!a100_WindowDown1
+    if  (!PaintOK) return
+    window mousepos Xpos Ypos
+    PaintPosData = "@PaintPosData@ @Xpos@ @Ypos@ "
+    Points ++
+    if  (Points > 1)
++       PaintData = "@PaintPosData@ END"
++       window draw Demo_Paint_WIN PaintData
++   endif
+    return
+
+//******************************************
+//* Mouse Button 2 Down                    *
+//******************************************
+!a100_WindowDown2
+    if  (!PaintOK) return
+    Drag = 'y'
+    return
+
+//******************************************
+//* Mouse Button 2 Up                      *
+//******************************************
+!a100_WindowUp2
+    if  (!PaintOK) return
+    Drag = 'n'
+    return
+
+//******************************************
+//* Mouse Movement                         *
+//******************************************
+!a100_WindowMouse
+    window mousepos Demo_Paint_Xpos_EFOBJ Demo_Paint_Ypos_EFOBJ
+    window modify Demo_Paint_Xpos_EFOBJ
+    window modify Demo_Paint_Ypos_EFOBJ
+    if  (!PaintOK) return
+    if  (!Drag) return
+    window windowpos Demo_Paint_Object_STTXT Xpos Ypos Cxpos Cypos
+    window size Demo_Paint_Object_STTXT @Demo_Paint_Xpos_EFOBJ @Demo_Paint_Ypos_EFOBJ @Cxpos @Cypos
+    window paint Demo_Paint_Object_STTXT
+    return
+ 
+//*********************************************************************
+//* Main Menu Actions                                                 *
+//*********************************************************************
+ 
+!a110_Demo_Main_Headingon_MSOBJ
+    WindowBannerSize = 85
+    return
+
+!a110_Demo_Main_Headingoff_MSOBJ
+    WindowBannerSize = 0
+    return
+
+!a110_Demo_Main_Timer_MSOBJ
+    window pointer wait
+    window open Demo_Timer_WIN shade
+    window center Demo_Timer_WIN
+    window clear Demo_Timer_WIN
+    Demo_Timer_Off_RBOBJ = 'Y'
+    window modify Demo_Timer_Off_RBOBJ
+    window unshade Demo_Timer_WIN
+    window pointer arrow
+    return
+ 
+!a110_Demo_Main_Message_MSOBJ
+    window pointer wait
+    window open Demo_Message_WIN shade
+    window center Demo_Message_WIN
+    window clear Demo_Message_WIN
+    Demo_Message_Error_RBOBJ = 'Y'
+    Demo_Message_OK_RBOBJ = 'Y'
+    window modify Demo_Message_Error_RBOBJ
+    window modify Demo_Message_OK_RBOBJ
+    window unshade Demo_Message_WIN
+    window pointer arrow
+    return
+ 
+!a110_Demo_Main_Font_MSOBJ
+    window pointer wait
+    window open Demo_Font_WIN shade
+    window center Demo_Font_WIN
+    window clear Demo_Font_WIN
+    Demo_Font_CDefault_RBOBJ = "Y"
+    Demo_Font_BWhite_RBOBJ = "Y"
+    Demo_Font_FDefault_RBOBJ = "Y"
+    window modify Demo_Font_CDefault_RBOBJ
+    window modify Demo_Font_BWhite_RBOBJ
+    window modify Demo_Font_FDefault_RBOBJ
+    call !c100_Demo_Font_Setup
+    window unshade Demo_Font_WIN
+    window pointer arrow
+    return
+
+!a110_Demo_Main_Sound_MSOBJ
+    window pointer wait
+    window open Demo_Sound_WIN shade
+    window center Demo_Sound_WIN
+    window clear Demo_Sound_WIN
+    window backcolor Demo_Sound_C1S_PBOBJ black
+    window backcolor Demo_Sound_D1S_PBOBJ black
+    window backcolor Demo_Sound_F1S_PBOBJ black
+    window backcolor Demo_Sound_G1S_PBOBJ black
+    window backcolor Demo_Sound_A1S_PBOBJ black
+    window backcolor Demo_Sound_A1_PBOBJ white
+    window backcolor Demo_Sound_B1_PBOBJ white
+    window backcolor Demo_Sound_C1_PBOBJ white
+    window backcolor Demo_Sound_D1_PBOBJ white
+    window backcolor Demo_Sound_E1_PBOBJ white
+    window backcolor Demo_Sound_F1_PBOBJ white
+    window backcolor Demo_Sound_G1_PBOBJ white
+    window backcolor Demo_Sound_C2_PBOBJ white
+
+    window unshade Demo_Sound_WIN
+    Sound = 'n'
+    window push Demo_Sound_C1S_PBOBJ
+    window push Demo_Sound_D1S_PBOBJ
+    window push Demo_Sound_F1S_PBOBJ
+    window push Demo_Sound_G1S_PBOBJ
+    window push Demo_Sound_A1S_PBOBJ
+    window push Demo_Sound_C2_PBOBJ
+    window pointer arrow
+    return
+
+!a110_Demo_Main_Math_MSOBJ
+    window pointer wait
+    window open Demo_Math_WIN shade
+    window center Demo_Math_WIN
+    window clear Demo_Math_WIN
+
+    window disable Demo_Math_I1Sum_EFOBJ
+    window disable Demo_Math_I2Sum_EFOBJ
+    window disable Demo_Math_ISumResult_EFOBJ
+    window disable Demo_Math_I1Sub_EFOBJ
+    window disable Demo_Math_I2Sub_EFOBJ
+    window disable Demo_Math_ISubResult_EFOBJ
+    window disable Demo_Math_I1Mult_EFOBJ
+    window disable Demo_Math_I2Mult_EFOBJ
+    window disable Demo_Math_IMultResult_EFOBJ
+    window disable Demo_Math_I1Div_EFOBJ
+    window disable Demo_Math_I2Div_EFOBJ
+    window disable Demo_Math_IDivResult_EFOBJ
+
+    window disable Demo_Math_D1Sum_EFOBJ
+    window disable Demo_Math_D2Sum_EFOBJ
+    window disable Demo_Math_DSumResult_EFOBJ
+    window disable Demo_Math_D1Sub_EFOBJ
+    window disable Demo_Math_D2Sub_EFOBJ
+    window disable Demo_Math_DSubResult_EFOBJ
+    window disable Demo_Math_D1Mult_EFOBJ
+    window disable Demo_Math_D2Mult_EFOBJ
+    window disable Demo_Math_DMultResult_EFOBJ
+    window disable Demo_Math_D1Div_EFOBJ
+    window disable Demo_Math_D2Div_EFOBJ
+    window disable Demo_Math_DDivResult_EFOBJ
+
+    call !a130_Demo_Math_Integer_EFOBJ
+    call !a130_Demo_Math_Dollar_EFOBJ
+
+    window unshade Demo_Math_WIN
+    window pointer arrow
+    return
+ 
+!a110_Demo_Main_Protect_MSOBJ
+    window pointer wait
+    window conceal Demo_Protect_Password_EFOBJ
+    window open Demo_Protect_WIN shade
+    window center Demo_Protect_WIN
+    window clear Demo_Protect_WIN
+    window unshade Demo_Protect_WIN
+    window pointer arrow
+    window check Demo_Main_Protect_MSOBJ
+    Hold_Button = Demo_Main_Protect_MSOBJ
+    Demo_Main_Protect_MSOBJ = "Protect F~GB"
+    window modify Demo_Main_Protect_MSOBJ
+    Demo_Main_Protect_MSOBJ = Hold_Button
+    return
+
+!a110_Demo_Main_Draw_MSOBJ
+    window pointer wait
+    window open Demo_Draw_WIN shade
+    window center Demo_Draw_WIN
+    window clear Demo_Draw_WIN
+    window disable Demo_Draw_Show_PBOBJ
+    call !a120_Demo_Draw_Data
+    window draw Demo_Draw_WIN Demo_Draw_Data
+    window unshade Demo_Draw_WIN
+    window pointer arrow
+    return
+
+!a110_Demo_Main_Size_MSOBJ
+    window pointer wait
+    window open Demo_Size_WIN shade
+    window center Demo_Size_WIN
+    window clear Demo_Size_WIN
+    window color Demo_Size_Small_PBOBJ black
+    window color Demo_Size_Medium_PBOBJ red
+    window color Demo_Size_Large_PBOBJ black
+    window size Demo_Size_Small_PBOBJ 20 80 80 35
+    window size Demo_Size_Medium_PBOBJ 100 80 80 35
+    window size Demo_Size_Large_PBOBJ 180 80 80 35
+    window size Demo_Size_Cancel_PBOBJ 20 20 80 35
+    SizeMove = 'y'
+    Demo_Timer_Off_RBOBJ = 'Y'
+    window timer on 0
+    window unshade Demo_Size_WIN
+    window pointer arrow
+    return
+
+!Demo_Main_Search_MSOBJ
+    window open Demo_Select_WIN shade
+    window center Demo_Select_WIN
+    window clear Demo_Select_WIN
+    Demo_Select_File_EFOBJ = Currdir
+    window modify Demo_Select_File_EFOBJ
+    window setfocus Demo_Select_File_EFOBJ
+    window unshade Demo_Select_WIN
+    return
+
+!a110_Demo_Main_Paint_MSOBJ
+    window pointer wait
+    window open Demo_Paint_WIN shade
+    window center Demo_Paint_WIN
+    window clear Demo_Paint_WIN
+    window backcolor Demo_Paint_Red_PBOBJ red
+    window backcolor Demo_Paint_Green_PBOBJ green
+    window backcolor Demo_Paint_Blue_PBOBJ blue
+    window color Demo_Paint_Blue_PBOBJ white
+    window backcolor Demo_Paint_Undo_PBOBJ red
+    window disable Demo_Paint_Undo_PBOBJ
+    window disable Demo_Paint_Xpos_EFOBJ
+    window disable Demo_Paint_Ypos_EFOBJ
+    PaintOK = 'Y'
+    Demo_Paint_Off_RBOBJ = 'Y'
+    window modify Demo_Paint_Off_RBOBJ
+    window setfocus Demo_Paint_Erase_PBOBJ
+    window unshade Demo_Paint_WIN
+    window paint Demo_Paint_Object_STTXT
+    window pointer arrow
+    return
+
+!a110_Demo_Main_Bitmap_MSOBJ
+    window pointer wait
+    open Bitmap null
+    beditdata
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxx                                                  xxxxxx
+xxxxxx                                                  xxxxxx
+xxxxxx            xxxxx                 x               xxxxxx
+xxxxxx              x     xxxx    xxx  xxx              xxxxxx
+xxxxxx              x    x    x  x      x               xxxxxx
+xxxxxx              x    xxxxx    xx    x               xxxxxx
+xxxxxx              x    x          x   x x             xxxxxx
+xxxxxx              x     xxxx   xxx     x              xxxxxx
+xxxxxx                                                  xxxxxx
+xxxxxx                                                  xxxxxx
+xxxxxx       xxxx                                       xxxxxx
+xxxxxx       x   x  x  x    x x xx    xxx    x xxx      xxxxxx
+xxxxxx       x   x    xxx   xx x  x  x   x   xx   x     xxxxxx
+xxxxxx       xxxx   x  x    x  x  x  x   x   x    x     xxxxxx
+xxxxxx       x   x  x  x    x  x  x  x   x   x    x     xxxxxx
+xxxxxx       x   x  x  x x  x  x  x  x   x   xx   x     xxxxxx
+xxxxxx       xxxx   x   x   x  x  x   xxx x  x xxx      xxxxxx
+xxxxxx                                       x          xxxxxx
+xxxxxx                                       x          xxxxxx
+xxxxxx                                                  xxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+*enddata
+    window filebitmap Demo_Bitmap_User2_UDOBJ mono
+    close Bitmap
+    open Bitmap null
+    beditdata
+   33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333      
+ 333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333332
+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333322 
+33333333RRRRRRRRRRR333333GGGGGGGGGGG33333BBB333333333333333CCCCCCCCCCC3333388888888888333333322
+3333333RRR3333333RRR3333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333388833333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333338883333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333388833333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388888888888333333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333888333333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333388833333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333338883333322
+3333333RRR3333333RRR3333GGG3333333GGG3333BBB3333333BBB3333CCC3333333CCC333388833333338883333322
+33333333RRRRRRRRRRR333333GGGGGGGGGGG33333BBBBBBBBBBBBB33333CCCCCCCCCCC3333388833333338883333322
+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333322
+X333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333322 
+ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   
+*enddata
+    window filebitmap Demo_Bitmap_User3_UDOBJ color
+    close Bitmap
+    window open Demo_Bitmap_WIN shade
+    window center Demo_Bitmap_WIN
+    window clear Demo_Bitmap_WIN
+    window unshade Demo_Bitmap_WIN
+    window pointer arrow
+    return
+
+!a110_Demo_Main_Chart_MSOBJ
+    window pointer wait
+    window open Demo_Chart_WIN shade
+    window center Demo_Chart_WIN
+    window clear Demo_Chart_WIN
+    window color Demo_Chart_Data1_STTXT red
+    window color Demo_Chart_Data2_STTXT green
+    window color Demo_Chart_Data3_STTXT blue
+    window color Demo_Chart_Black1_STTXT darkred
+    window color Demo_Chart_Black2_STTXT darkgreen
+    window color Demo_Chart_Black3_STTXT darkblue
+    Demo_Chart_Var1_EFOBJ = '40'
+    window modify Demo_Chart_Var1_EFOBJ
+    Demo_Chart_Var2_EFOBJ = '55'
+    window modify Demo_Chart_Var2_EFOBJ
+    Demo_Chart_Var3_EFOBJ = '95'
+    window modify Demo_Chart_Var3_EFOBJ
+    call !a130_Demo_Chart_Var1_EFOBJ
+    call !a130_Demo_Chart_Var2_EFOBJ
+    call !a130_Demo_Chart_Var3_EFOBJ
+    window unshade Demo_Chart_WIN
+    window pointer arrow
+    return
+
+!a110_Demo_Main_Objects_MSOBJ
+    window pointer wait
+    close Bitmap error
+    open Bitmap null
+    beditdata
+   33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333      
+ 333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333332
+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333322 
+33333333RRRRRRRRRRR333333GGGGGGGGGGG33333BBB333333333333333CCCCCCCCCCC3333388888888888333333322
+3333333RRR3333333RRR3333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333388833333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333338883333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333388833333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388888888888333333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333888333333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333388833333322
+3333333RRR33333333333333GGG3333333GGG3333BBB33333333333333CCC3333333CCC333388833333338883333322
+3333333RRR3333333RRR3333GGG3333333GGG3333BBB3333333BBB3333CCC3333333CCC333388833333338883333322
+33333333RRRRRRRRRRR333333GGGGGGGGGGG33333BBBBBBBBBBBBB33333CCCCCCCCCCC3333388833333338883333322
+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333322
+X333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333322 
+ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   
+*enddata
+    window filebitmap Demo_Fields_User_UDOBJ color
+    close Bitmap
+    window open Demo_Fields_WIN shade
+    window center Demo_Fields_WIN
+    window clear Demo_Fields_WIN
+    Demo_Fields_Radio1_RBOBJ = 'Y'
+    window modify Demo_Fields_Radio1_RBOBJ
+    Demo_Fields_List_LBOBJ = "Listbox 1"
+    window insert end default Demo_Fields_List_LBOBJ
+    Demo_Fields_List_LBOBJ = "Listbox 2"
+    window insert end default Demo_Fields_List_LBOBJ
+    Demo_Fields_List_LBOBJ = "Listbox 3"
+    window insert end default Demo_Fields_List_LBOBJ
+    Demo_Fields_List_LBOBJ = "INDEX=1"
+    window select Demo_Fields_List_LBOBJ
+    Demo_Fields_List_LBOBJ = null
+
+    Demo_Fields_Multilist_LBOBJ = "Multi Select Listbox Line 1"
+    window insert end default Demo_Fields_Multilist_LBOBJ
+    Demo_Fields_Multilist_LBOBJ = "Multi Select Listbox Line 2"
+    window insert end default Demo_Fields_Multilist_LBOBJ
+    Demo_Fields_Multilist_LBOBJ = "Multi Select Listbox Line 3"
+    window insert end default Demo_Fields_Multilist_LBOBJ
+    Demo_Fields_Multilist_LBOBJ = "INDEX=1"
+    window select Demo_Fields_Multilist_LBOBJ
+    Demo_Fields_Multilist_LBOBJ = null
+
+    Demo_Fields_Simple_COOBJ = "1 Simple"
+    window insert end default Demo_Fields_Simple_COOBJ
+    Demo_Fields_Simple_COOBJ = "2 Simple"
+    window insert end default Demo_Fields_Simple_COOBJ
+    Demo_Fields_Simple_COOBJ = "3 Simple"
+    window insert end default Demo_Fields_Simple_COOBJ
+
+    Demo_Fields_Drop_COOBJ = "1 Drop"
+    window insert end default Demo_Fields_Drop_COOBJ
+    Demo_Fields_Drop_COOBJ = "2 Drop"
+    window insert end default Demo_Fields_Drop_COOBJ
+    Demo_Fields_Drop_COOBJ = "3 Drop"
+    window insert end default Demo_Fields_Drop_COOBJ
+
+    Demo_Fields_Droplist_COOBJ = "1 Droplist"
+    window insert end default Demo_Fields_Droplist_COOBJ
+    Demo_Fields_Droplist_COOBJ = "2 Droplist"
+    window insert end default Demo_Fields_Droplist_COOBJ
+    Demo_Fields_Droplist_COOBJ = "3 Droplist"
+    window insert end default Demo_Fields_Droplist_COOBJ
+
+    window enable Demo_Fields_Disable_PBOBJ
+    window disable Demo_Fields_Enable_PBOBJ
+
+    window unshade Demo_Fields_WIN
+    window pointer arrow
+    return
+    
+!a110_Demo_Main_Exit_MSOBJ
+    message = "Exit Verification, Are You Sure?"
+    window message question yesno
+    if  (message)
++       window stop
++   endif
+    return
+ 
+!a110_Demo_Main_About_MSOBJ
+    message = "This system will demonstrate some of the capabilities of B-Edit(PM)."
+    window message info ok
+    return
+ 
+!a120_Demo_Timer_Cancel_PBOBJ
+    window obtain Demo_Timer_WIN
+    window close Demo_Timer_WIN
+    Demo_Timer_Off_RBOBJ = 'Y'
+    window timer on 1
+    return
+ 
+!a120_Demo_Message_OK_PBOBJ
+    window obtain Demo_Message_WIN
+    message = "This is a sample message box created in B-Edit(PM)!"
+    //**************************
+    //* Error
+    //**************************
+    if  (Demo_Message_Error_RBOBJ) and (Demo_Message_OK_RBOBJ) window message error ok
+    if  (Demo_Message_Error_RBOBJ) and (Demo_Message_Okcancel_RBOBJ) window message error okcancel
+    if  (Demo_Message_Error_RBOBJ) and (Demo_Message_Yesno_RBOBJ) window message error yesno
+    if  (Demo_Message_Error_RBOBJ) and (Demo_Message_Yesnocancel_RBOBJ) window message error yesnocancel
+    if  (Demo_Message_Error_RBOBJ) and (Demo_Message_Enter_RBOBJ) window message error enter
+    //**************************
+    //* Warning
+    //**************************
+    if  (Demo_Message_Warning_RBOBJ) and (Demo_Message_OK_RBOBJ) window message warning ok
+    if  (Demo_Message_Warning_RBOBJ) and (Demo_Message_Okcancel_RBOBJ) window message warning okcancel
+    if  (Demo_Message_Warning_RBOBJ) and (Demo_Message_Yesno_RBOBJ) window message warning yesno
+    if  (Demo_Message_Warning_RBOBJ) and (Demo_Message_Yesnocancel_RBOBJ) window message warning yesnocancel
+    if  (Demo_Message_Warning_RBOBJ) and (Demo_Message_Enter_RBOBJ) window message warning enter
+    //**************************
+    //* Information
+    //**************************
+    if  (Demo_Message_Info_RBOBJ) and (Demo_Message_OK_RBOBJ) window message info ok
+    if  (Demo_Message_Info_RBOBJ) and (Demo_Message_Okcancel_RBOBJ) window message info okcancel
+    if  (Demo_Message_Info_RBOBJ) and (Demo_Message_Yesno_RBOBJ) window message info yesno
+    if  (Demo_Message_Info_RBOBJ) and (Demo_Message_Yesnocancel_RBOBJ) window message info yesnocancel
+    if  (Demo_Message_Info_RBOBJ) and (Demo_Message_Enter_RBOBJ) window message info enter
+    //**************************
+    //* Question
+    //**************************
+    if  (Demo_Message_Question_RBOBJ) and (Demo_Message_OK_RBOBJ) window message question ok
+    if  (Demo_Message_Question_RBOBJ) and (Demo_Message_Okcancel_RBOBJ) window message question okcancel
+    if  (Demo_Message_Question_RBOBJ) and (Demo_Message_Yesno_RBOBJ) window message question yesno
+    if  (Demo_Message_Question_RBOBJ) and (Demo_Message_Yesnocancel_RBOBJ) window message question yesnocancel
+    if  (Demo_Message_Question_RBOBJ) and (Demo_Message_Enter_RBOBJ) window message question enter
+    return
+ 
+!a120_Demo_Message_Cancel_PBOBJ
+    window obtain Demo_Message_WIN
+    window close Demo_Message_WIN
+    return
+ 
+!a120_Demo_Font_Cancel_PBOBJ
+    window obtain Demo_Font_WIN
+    window close Demo_Font_WIN
+    return
+ 
+ 
+!a130_Demo_Font_Entry_EFOBJ
+    window obtain Demo_Font_Entry_EFOBJ
+    return
+
+!a130_Demo_Music_Note_EFOBJ
+    window obtain Demo_Music_Note_EFOBJ
+    return
+
+!a130_Demo_Music_Duration_EFOBJ
+    window obtain Demo_Music_Duration_EFOBJ
+    return
+
+!a130_Demo_Math_Integer_EFOBJ
+    window obtain Demo_Math_Integer1_EFOBJ
+    window obtain Demo_Math_Integer2_EFOBJ
+
+    Integer1 = Demo_Math_Integer1_EFOBJ
+    Integer2 = Demo_Math_Integer2_EFOBJ
+    if  (Demo_Math_Integer1_EFOBJ = null)
++       Demo_Math_Integer1_EFOBJ = "0"
++   endif
+    if  (Demo_Math_Integer2_EFOBJ = null)
++       Demo_Math_Integer2_EFOBJ = "0"
++   endif
+
+    Demo_Math_I1Sum_EFOBJ = Demo_Math_Integer1_EFOBJ
+    window modify Demo_Math_I1Sum_EFOBJ
+    Demo_Math_I2Sum_EFOBJ = "+ @Demo_Math_Integer2_EFOBJ@"
+    window modify Demo_Math_I2Sum_EFOBJ
+    Result = Integer1 + Integer2
+    Demo_Math_ISumResult_EFOBJ = Result
+    window modify Demo_Math_ISumResult_EFOBJ
+
+    Demo_Math_I1Sub_EFOBJ = Demo_Math_Integer1_EFOBJ
+    window modify Demo_Math_I1Sub_EFOBJ
+    Demo_Math_I2Sub_EFOBJ = "- @Demo_Math_Integer2_EFOBJ@"
+    window modify Demo_Math_I2Sub_EFOBJ
+    Result = Integer1 - Integer2
+    Demo_Math_ISubResult_EFOBJ = Result
+    window modify Demo_Math_ISubResult_EFOBJ
+
+    Demo_Math_I1Mult_EFOBJ = Demo_Math_Integer1_EFOBJ
+    window modify Demo_Math_I1Mult_EFOBJ
+    Demo_Math_I2Mult_EFOBJ = "* @Demo_Math_Integer2_EFOBJ@"
+    window modify Demo_Math_I2Mult_EFOBJ
+    Result = Integer1 * Integer2
+    Demo_Math_IMultResult_EFOBJ = Result
+    window modify Demo_Math_IMultResult_EFOBJ
+
+    Demo_Math_I1Div_EFOBJ = Demo_Math_Integer1_EFOBJ
+    window modify Demo_Math_I1Div_EFOBJ
+    Demo_Math_I2Div_EFOBJ = "/ @Demo_Math_Integer2_EFOBJ@"
+    window modify Demo_Math_I2Div_EFOBJ
+    if  (Integer2 != 0)
++       Result = Integer1 / Integer2
++   else
++       Result = 0
++   endif
+    Demo_Math_IDivResult_EFOBJ = Result
+    window modify Demo_Math_IDivResult_EFOBJ
+
+    return
+
+!a130_Demo_Math_Dollar_EFOBJ
+    window obtain Demo_Math_Dollar1_EFOBJ
+    window obtain Demo_Math_Dollar2_EFOBJ
+
+    Dollar1 = Demo_Math_Dollar1_EFOBJ
+    Dollar2 = Demo_Math_Dollar2_EFOBJ
+    if  (Demo_Math_Dollar1_EFOBJ = null)
++       Demo_Math_Dollar1_EFOBJ = "0.00"
++   endif
+    if  (Demo_Math_Dollar2_EFOBJ = null)
++       Demo_Math_Dollar2_EFOBJ = "0.00"
++   endif
+
+    Demo_Math_D1Sum_EFOBJ = Demo_Math_Dollar1_EFOBJ
+    window modify Demo_Math_D1Sum_EFOBJ
+    Demo_Math_D2Sum_EFOBJ = "+ @Demo_Math_Dollar2_EFOBJ@"
+    window modify Demo_Math_D2Sum_EFOBJ
+    DollarResult = Dollar1 + Dollar2
+    Demo_Math_DSumResult_EFOBJ = DollarResult
+    window modify Demo_Math_DSumResult_EFOBJ
+
+    Demo_Math_D1Sub_EFOBJ = Demo_Math_Dollar1_EFOBJ
+    window modify Demo_Math_D1Sub_EFOBJ
+    Demo_Math_D2Sub_EFOBJ = "- @Demo_Math_Dollar2_EFOBJ@"
+    window modify Demo_Math_D2Sub_EFOBJ
+    DollarResult = Dollar1 - Dollar2
+    Demo_Math_DSubResult_EFOBJ = DollarResult
+    window modify Demo_Math_DSubResult_EFOBJ
+
+    Demo_Math_D1Mult_EFOBJ = Demo_Math_Dollar1_EFOBJ
+    window modify Demo_Math_D1Mult_EFOBJ
+    Demo_Math_D2Mult_EFOBJ = "* @Demo_Math_Dollar2_EFOBJ@"
+    window modify Demo_Math_D2Mult_EFOBJ
+    DollarResult = Dollar1 * Dollar2
+    Demo_Math_DMultResult_EFOBJ = DollarResult
+    window modify Demo_Math_DMultResult_EFOBJ
+
+    Demo_Math_D1Div_EFOBJ = Demo_Math_Dollar1_EFOBJ
+    window modify Demo_Math_D1Div_EFOBJ
+    Demo_Math_D2Div_EFOBJ = "/ @Demo_Math_Dollar2_EFOBJ@"
+    window modify Demo_Math_D2Div_EFOBJ
+
+    TestDollar = Dollar2
+    if  (TestDollar != '0.00')
++       DollarResult = Dollar1 / Dollar2
++   else
++       DollarResult = 0
++   endif
+    Demo_Math_DDivResult_EFOBJ = DollarResult
+    window modify Demo_Math_DDivResult_EFOBJ
+
+    return
+
+!a110_Demo_Main_Edit_MSOBJ
+    window pointer wait
+    window open Demo_Edit_WIN shade
+    window center Demo_Edit_WIN
+    window clear Demo_Edit_WIN
+    window unshade Demo_Edit_WIN
+    window pointer arrow
+    return
+
+!b100_Demo_Timer_Setup
+    window obtain Demo_Timer_WIN
+    if  (Demo_Timer_Off_RBOBJ) window timer off
+    if  (Demo_Timer_1/2_RBOBJ) window timer on 0
+    if  (Demo_Timer_1_RBOBJ) window timer on 1
+    if  (Demo_Timer_5_RBOBJ) window timer on 5
+    if  (Demo_Timer_10_RBOBJ) window timer on 10
+    if  (Demo_Timer_60_RBOBJ) window timer on 60
+    return
+
+!c100_Demo_Paint_Mouse
+    window obtain Demo_Paint_On_RBOBJ
+    if  (Demo_Paint_On_RBOBJ)
++       erase WindowMouse error
++       string WindowMouse = "call !a100_WindowMouse"
++   else
++       erase WindowMouse
++   endif
+    return
+
+!c100_Demo_Font_Setup
+    window obtain Demo_Font_WIN
+    Demo_Font_List_LBOBJ = "ALL"
+    window delete Demo_Font_List_LBOBJ
+    //*****************************
+    //* Color
+    //*****************************
+    if  (Demo_Font_CDefault_RBOBJ)
++       window color Demo_Font_Text_STTXT default
++       window color Demo_Font_Entry_EFOBJ default
++       window color Demo_Font_List_LBOBJ default
++       window color Demo_Font_MLE_MLOBJ default
++       window color Demo_Font_Cancel_PBOBJ default
++   endif
+    if  (Demo_Font_CWhite_RBOBJ)
++       window color Demo_Font_Text_STTXT white
++       window color Demo_Font_Entry_EFOBJ white
++       window color Demo_Font_List_LBOBJ white
++       window color Demo_Font_MLE_MLOBJ white
++       window color Demo_Font_Cancel_PBOBJ white
++   endif
+    if  (Demo_Font_CBlack_RBOBJ)
++       window color Demo_Font_Text_STTXT black
++       window color Demo_Font_Entry_EFOBJ black
++       window color Demo_Font_List_LBOBJ black
++       window color Demo_Font_MLE_MLOBJ black
++       window color Demo_Font_Cancel_PBOBJ black
++   endif
+    if  (Demo_Font_CBlue_RBOBJ)
++       window color Demo_Font_Text_STTXT blue
++       window color Demo_Font_Entry_EFOBJ blue
++       window color Demo_Font_List_LBOBJ blue
++       window color Demo_Font_MLE_MLOBJ blue
++       window color Demo_Font_Cancel_PBOBJ blue
++   endif
+    if  (Demo_Font_CRed_RBOBJ)
++       window color Demo_Font_Text_STTXT red
++       window color Demo_Font_Entry_EFOBJ red
++       window color Demo_Font_List_LBOBJ red
++       window color Demo_Font_MLE_MLOBJ red
++       window color Demo_Font_Cancel_PBOBJ red
++   endif
+    if  (Demo_Font_CGreen_RBOBJ)
++       window color Demo_Font_Text_STTXT green
++       window color Demo_Font_Entry_EFOBJ green
++       window color Demo_Font_List_LBOBJ green
++       window color Demo_Font_MLE_MLOBJ green
++       window color Demo_Font_Cancel_PBOBJ green
++   endif
+    if  (Demo_Font_CCyan_RBOBJ)
++       window color Demo_Font_Text_STTXT cyan
++       window color Demo_Font_Entry_EFOBJ cyan
++       window color Demo_Font_List_LBOBJ cyan
++       window color Demo_Font_MLE_MLOBJ cyan
++       window color Demo_Font_Cancel_PBOBJ cyan
++   endif
+    //*****************************
+    //* Background
+    //*****************************
+    if  (Demo_Font_BDefault_RBOBJ)
++       window backcolor Demo_Font_Text_STTXT default
++       window backcolor Demo_Font_Entry_EFOBJ default
++       window backcolor Demo_Font_List_LBOBJ default
++       window backcolor Demo_Font_MLE_MLOBJ default
++       window backcolor Demo_Font_Cancel_PBOBJ default
++   endif
+    if  (Demo_Font_BWhite_RBOBJ)
++       window backcolor Demo_Font_Text_STTXT white
++       window backcolor Demo_Font_Entry_EFOBJ white
++       window backcolor Demo_Font_List_LBOBJ white
++       window backcolor Demo_Font_MLE_MLOBJ white
++       window backcolor Demo_Font_Cancel_PBOBJ white
++   endif
+    if  (Demo_Font_BBlack_RBOBJ)
++       window backcolor Demo_Font_Text_STTXT black
++       window backcolor Demo_Font_Entry_EFOBJ black
++       window backcolor Demo_Font_List_LBOBJ black
++       window backcolor Demo_Font_MLE_MLOBJ black
++       window backcolor Demo_Font_Cancel_PBOBJ black
++   endif
+    if  (Demo_Font_BBlue_RBOBJ)
++       window backcolor Demo_Font_Text_STTXT blue
++       window backcolor Demo_Font_Entry_EFOBJ blue
++       window backcolor Demo_Font_List_LBOBJ blue
++       window backcolor Demo_Font_MLE_MLOBJ blue
++       window backcolor Demo_Font_Cancel_PBOBJ blue
++   endif
+    if  (Demo_Font_BRed_RBOBJ)
++       window backcolor Demo_Font_Text_STTXT red
++       window backcolor Demo_Font_Entry_EFOBJ red
++       window backcolor Demo_Font_List_LBOBJ red
++       window backcolor Demo_Font_MLE_MLOBJ red
++       window backcolor Demo_Font_Cancel_PBOBJ red
++   endif
+    if  (Demo_Font_BGreen_RBOBJ)
++       window backcolor Demo_Font_Text_STTXT green
++       window backcolor Demo_Font_Entry_EFOBJ green
++       window backcolor Demo_Font_List_LBOBJ green
++       window backcolor Demo_Font_MLE_MLOBJ green
++       window backcolor Demo_Font_Cancel_PBOBJ green
++   endif
+    if  (Demo_Font_BCyan_RBOBJ)
++       window backcolor Demo_Font_Text_STTXT cyan
++       window backcolor Demo_Font_Entry_EFOBJ cyan
++       window backcolor Demo_Font_List_LBOBJ cyan
++       window backcolor Demo_Font_MLE_MLOBJ cyan
++       window backcolor Demo_Font_Cancel_PBOBJ cyan
++   endif
+    //*****************************
+    //* Font
+    //*****************************
+    if  (Demo_Font_FDefault_RBOBJ)
++       FontName = "Default"
++       window font Demo_Font_Text_STTXT 12.Proportional
++       window font Demo_Font_Entry_EFOBJ 12.Proportional
++       window font Demo_Font_List_LBOBJ 12.Proportional
++       window font Demo_Font_Cancel_PBOBJ 12.Proportional
++   endif
+    if  (Demo_Font_F12Helv_RBOBJ)
++       FontName = "12 Point Helv"
++       window font Demo_Font_Text_STTXT 12.Helv
++       window font Demo_Font_Entry_EFOBJ 12.Helv
++       window font Demo_Font_List_LBOBJ 12.Helv
++       window font Demo_Font_MLE_MLOBJ 12.Helv
++       window font Demo_Font_Cancel_PBOBJ 12.Helv
++   endif
+    if  (Demo_Font_F14Times_RBOBJ)
++       FontName = "14 Point Times"
++       window font Demo_Font_Text_STTXT 14.Times
++       window font Demo_Font_Entry_EFOBJ 14.Times
++       window font Demo_Font_List_LBOBJ 14.Times
++       window font Demo_Font_MLE_MLOBJ 14.Times
++       window font Demo_Font_Cancel_PBOBJ 14.Times
++   endif
+    if  (Demo_Font_F24Times_RBOBJ)
++       FontName = "24 Point Times"
++       window font Demo_Font_Text_STTXT 24.Times
++       window font Demo_Font_Entry_EFOBJ 24.Times
++       window font Demo_Font_List_LBOBJ 24.Times
++       window font Demo_Font_MLE_MLOBJ 24.Times
++       window font Demo_Font_Cancel_PBOBJ 24.Times
++   endif
+    if  (Demo_Font_F8Courier_RBOBJ)
++       FontName = "8 Point Courier"
++       window font Demo_Font_Text_STTXT 8.Courier
++       window font Demo_Font_Entry_EFOBJ 8.Courier
++       window font Demo_Font_List_LBOBJ 8.Courier
++       window font Demo_Font_MLE_MLOBJ 8.Courier
++       window font Demo_Font_Cancel_PBOBJ 8.Courier
++   endif
+    if  (Demo_Font_F12Courier_RBOBJ)
++       FontName = "12 Point Courier"
++       window font Demo_Font_Text_STTXT 12.Courier
++       window font Demo_Font_Entry_EFOBJ 12.Courier
++       window font Demo_Font_List_LBOBJ 12.Courier
++       window font Demo_Font_MLE_MLOBJ 12.Courier
++       window font Demo_Font_Cancel_PBOBJ 12.Courier
++   endif
+    if  (Demo_Font_F10Fixed_RBOBJ)
++       FontName = "10 Point Fixed"
++       window font Demo_Font_Text_STTXT 10.Fixed
++       window font Demo_Font_Entry_EFOBJ 10.Fixed
++       window font Demo_Font_List_LBOBJ 10.Fixed
++       window font Demo_Font_MLE_MLOBJ 10.Fixed
++       window font Demo_Font_Cancel_PBOBJ 10.Fixed
++   endif
+    Demo_Font_Text_STTXT = FontName
+    window modify Demo_Font_Text_STTXT
+    window hwnd Demo_Font_Entry_EFOBJ EntryHWND
+    Demo_Font_Entry_EFOBJ = EntryHWND
+    window modify Demo_Font_Entry_EFOBJ
+    Demo_Font_List_LBOBJ = FontName
+    window insert end default Demo_Font_List_LBOBJ
+    Demo_Font_List_LBOBJ = FontName
+    window insert end default Demo_Font_List_LBOBJ
+    Demo_Font_List_LBOBJ = FontName
+    window insert end default Demo_Font_List_LBOBJ
+    Demo_Font_List_LBOBJ = FontName
+    window insert end default Demo_Font_List_LBOBJ
+    close temp error
+    open temp null
+    beditdata
+Filedata Line 1 data
+Filedata Line 2 data
+Filedata Line 3 data
+*enddata
+    window fileinsert end default Demo_Font_List_LBOBJ
+    close temp
+    Demo_Font_MLE_MLOBJ = FontName
+    window modify Demo_Font_MLE_MLOBJ
+//    window font Demo_Font_MLE_MLOBJ 8.Times
+
+    return
+
+!a120_Demo_Sound_Cancel_PBOBJ
+    window obtain Demo_Sound_WIN
+    window close Demo_Sound_WIN
+    return
+
+!a120_Demo_Sound_Bell_PBOBJ
+    bell
+    return
+
+!a120_Demo_Sound_Music_PBOBJ
+    window pointer wait
+    window open Demo_Music_WIN shade
+    window center Demo_Music_WIN
+    window clear Demo_Music_WIN
+    window disable Demo_Music_Mode_EFOBJ
+    Demo_Music_Mode_EFOBJ = "Insert"
+    window modify Demo_Music_Mode_EFOBJ
+    window font Demo_Music_List_LBOBJ 10.Fixed
+    window setfocus Demo_Music_Note_EFOBJ
+    window unshade Demo_Music_WIN
+    window pointer arrow
+    window default Demo_Music_Keep_PBOBJ
+    return
+
+!a120_Demo_Music_Cancel_PBOBJ
+    window close Demo_Music_WIN
+    return
+
+!a120_Demo_Music_Play_PBOBJ
+    Demo_Music_List_LBOBJ = "INDEX"
+    window obtain Demo_Music_List_LBOBJ
+    Selected2 = Demo_Music_List_LBOBJ
+    Demo_Music_List_LBOBJ = null
+    Index = 0
+    do  
+        Index ++
+        Demo_Music_List_LBOBJ = "INDEX=@Index@"
+        window obtain Demo_Music_List_LBOBJ
+        if  (Demo_Music_List_LBOBJ != null)
++           scan:/@Demo_Music_List_LBOBJ/:word
++           Demo_Music_Note_EFOBJ = left
++           scan:/@right/:word
++           Demo_Music_Duration_EFOBJ = left
++           Demo_Music_List_LBOBJ = "INDEX=@Index@"
++           window select Demo_Music_List_LBOBJ
++           window sound @Demo_Music_Note_EFOBJ @Demo_Music_Duration_EFOBJ
++       endif
+    until (Demo_Music_List_LBOBJ = null)
+    window setfocus Demo_Music_Note_EFOBJ
+    Demo_Music_List_LBOBJ = "INDEX=@Selected2@"
+    window select Demo_Music_List_LBOBJ
+    return
+
+!a120_Demo_Music_Clear_PBOBJ
+    message = "Delete all, Are you sure?"
+    window message question yesno
+    if  (!message) return
+    Demo_Music_List_LBOBJ = "ALL"
+    window delete Demo_Music_List_LBOBJ
+    Demo_Music_Mode_EFOBJ = "Insert"
+    window modify Demo_Music_Mode_EFOBJ
+    window setfocus Demo_Music_Note_EFOBJ
+    window default Demo_Music_Keep_PBOBJ
+    return
+
+!a120_Demo_Music_Insert_PBOBJ
+    Demo_Music_Mode_EFOBJ = "Insert"
+    window modify Demo_Music_Mode_EFOBJ
+    window setfocus Demo_Music_Note_EFOBJ
+    window default Demo_Music_Keep_PBOBJ
+    return
+
+!a120_Demo_Music_Modify_PBOBJ
+    Demo_Music_List_LBOBJ = null
+    window obtain Demo_Music_List_LBOBJ
+    if  (Demo_Music_List_LBOBJ = null)
++       message = "Please select an item first!"
++       window message warning ok
++       return
++   endif
+    Demo_Music_Mode_EFOBJ = "Modify"
+    window modify Demo_Music_Mode_EFOBJ
+    scan:/@Demo_Music_List_LBOBJ/:word
+    Demo_Music_Note_EFOBJ = left
+    scan:/@right/:word
+    Demo_Music_Duration_EFOBJ = left
+    window modify Demo_Music_Note_EFOBJ
+    window modify Demo_Music_Duration_EFOBJ
+    window setfocus Demo_Music_Note_EFOBJ
+    window default Demo_Music_Keep_PBOBJ
+    return
+
+!a120_Demo_Music_Delete_PBOBJ
+    Demo_Music_List_LBOBJ = null
+    window obtain Demo_Music_List_LBOBJ
+    if  (Demo_Music_List_LBOBJ = null)
++       message = "Please select an item first!"
++       window message warning ok
++       return
++   endif
+    message = "Delete, Are you sure?"
+    window message question yesno
+    if  (!message) return
+    window delete Demo_Music_List_LBOBJ
+    return
+
+!a120_Demo_Music_Test_PBOBJ
+    window obtain Demo_Music_Note_EFOBJ
+    window obtain Demo_Music_Duration_EFOBJ
+    window sound @Demo_Music_Note_EFOBJ @Demo_Music_Duration_EFOBJ
+    window setfocus Demo_Music_Note_EFOBJ
+    window default Demo_Music_Keep_PBOBJ
+    return
+
+!a120_Demo_Music_Keep_PBOBJ
+    window obtain Demo_Music_Note_EFOBJ
+    window obtain Demo_Music_Duration_EFOBJ
+    window obtain Demo_Music_Mode_EFOBJ
+    if  (Demo_Music_Mode_EFOBJ = "Modify")
++       goto !a120_Demo_Music_Keep_PBOBJ_Modify
++   endif
+    Demo_Music_List_LBOBJ = null
+    window obtain Demo_Music_List_LBOBJ
+    if  (Demo_Music_List_LBOBJ != null) goto !a120_Demo_Music_Keep_PBOBJ_Insert
+    Demo_Music_List_LBOBJ = "@Demo_Music_Note_EFOBJ@      @Demo_Music_Duration_EFOBJ@"
+    window insert end default Demo_Music_List_LBOBJ
+    Demo_Music_List_LBOBJ = "COUNT"
+    window obtain Demo_Music_List_LBOBJ
+    Demo_Music_List_LBOBJ = "INDEX=@Demo_Music_List_LBOBJ@"
+    window select Demo_Music_List_LBOBJ
+    window setfocus Demo_Music_Note_EFOBJ
+    window default Demo_Music_Keep_PBOBJ
+    return
+
+!a120_Demo_Music_Keep_PBOBJ_Insert
+    open Temp null
+    Demo_Music_List_LBOBJ = "INDEX"
+    window obtain Demo_Music_List_LBOBJ
+    Selected = Demo_Music_List_LBOBJ
+    Index = 0
+    do  
+        Index ++
+        Demo_Music_List_LBOBJ = "INDEX=@Index@"
+        window obtain Demo_Music_List_LBOBJ
+        if  (Demo_Music_List_LBOBJ != null)
++           i:/@Demo_Music_List_LBOBJ/
++       endif
++       if  (Index = Selected)
++           Demo_Music_List_LBOBJ = "@Demo_Music_Note_EFOBJ@      @Demo_Music_Duration_EFOBJ@"
++           i:/@Demo_Music_List_LBOBJ/
++       endif
+    until (Demo_Music_List_LBOBJ = null)
+    window disable Demo_Music_List_LBOBJ
+    Demo_Music_List_LBOBJ = "ALL"
+    window delete Demo_Music_List_LBOBJ
+    window fileinsert end default Demo_Music_List_LBOBJ
+    Selected ++
+    Demo_Music_List_LBOBJ = "INDEX=@Selected@"
+    window select Demo_Music_List_LBOBJ
+    close Temp
+    window setfocus Demo_Music_Note_EFOBJ
+    window default Demo_Music_Keep_PBOBJ
+    window enable Demo_Music_List_LBOBJ
+    return
+
+!a120_Demo_Music_Keep_PBOBJ_Modify
+    open Temp null
+    Demo_Music_List_LBOBJ = "INDEX"
+    window obtain Demo_Music_List_LBOBJ
+    Selected = Demo_Music_List_LBOBJ
+    Index = 0
+    do  
+        Index ++
+        Demo_Music_List_LBOBJ = "INDEX=@Index@"
+        window obtain Demo_Music_List_LBOBJ
+        if  (Demo_Music_List_LBOBJ != null)
++           i:/@Demo_Music_List_LBOBJ/
++       endif
++       if  (Index = Selected)
++           Demo_Music_List_LBOBJ = "@Demo_Music_Note_EFOBJ@      @Demo_Music_Duration_EFOBJ@"
++           r:/@Demo_Music_List_LBOBJ/
++       endif
+    until (Demo_Music_List_LBOBJ = null)
+    window disable Demo_Music_List_LBOBJ
+    Demo_Music_List_LBOBJ = "ALL"
+    window delete Demo_Music_List_LBOBJ
+    window fileinsert end default Demo_Music_List_LBOBJ
+    Demo_Music_List_LBOBJ = "INDEX=@Selected@"
+    window select Demo_Music_List_LBOBJ
+    close Temp
+    window setfocus Demo_Music_Note_EFOBJ
+    window default Demo_Music_Keep_PBOBJ
+    window enable Demo_Music_List_LBOBJ
+    return
+
+!a120_Demo_Math_Cancel_PBOBJ
+    window obtain Demo_Math_WIN
+    window close Demo_Math_WIN
+    return
+
+!a120_Demo_Protect_Cancel_PBOBJ
+    window obtain Demo_Protect_WIN
+    window close Demo_Protect_WIN
+    window uncheck Demo_Main_Protect_MSOBJ
+    Hold_Button = Demo_Main_Protect_MSOBJ
+    Demo_Main_Protect_MSOBJ = "~Protect"
+    window modify Demo_Main_Protect_MSOBJ
+    Demo_Main_Protect_MSOBJ = Hold_Button
+    return
+
+!a120_Demo_Protect_Disable_PBOBJ
+    window obtain Demo_Protect_WIN
+    window disable Demo_Protect_Cancel_PBOBJ
+    window disable Demo_Protect_Disable_PBOBJ
+    window disable Demo_Protect_Hide_PBOBJ
+    window disable Demo_Protect_Show_PBOBJ
+    window disable Demo_Protect_Password_EFOBJ
+    window disable Demo_Protect_Password_STTXT
+    window disable Demo_Protect_Menu_CBOBJ
+    if  (Demo_Protect_Menu_CBOBJ)
++       window disable Demo_Main_Timer_MSOBJ
++       window disable Demo_Main_Exit_MSOBJ
++       window disable Demo_Main_Sound_MSOBJ
++       window disable Demo_Main_Font_MSOBJ
++       window disable Demo_Main_Math_MSOBJ
++       window disable Demo_Main_Message_MSOBJ
++       window disable Demo_Main_Size_MSOBJ
++       window disable Demo_Main_Search_MSOBJ
++       window disable Demo_Main_Edit_MSOBJ
++       window disable Demo_Main_Bitmap_MSOBJ
++       window disable Demo_Main_Chart_MSOBJ
++       window disable Demo_Main_Objects_MSOBJ
++   endif
+    return
+
+!a120_Demo_Protect_Enable_PBOBJ
+    window obtain Demo_Protect_WIN
+    window enable Demo_Protect_Cancel_PBOBJ
+    window enable Demo_Protect_Disable_PBOBJ
+    window enable Demo_Protect_Hide_PBOBJ
+    window enable Demo_Protect_Show_PBOBJ
+    window enable Demo_Protect_Password_EFOBJ
+    window enable Demo_Protect_Password_STTXT
+    window enable Demo_Protect_Menu_CBOBJ
+    if  (Demo_Protect_Menu_CBOBJ)
++       window enable Demo_Main_Timer_MSOBJ
++       window enable Demo_Main_Exit_MSOBJ
++       window enable Demo_Main_Sound_MSOBJ
++       window enable Demo_Main_Font_MSOBJ
++       window enable Demo_Main_Math_MSOBJ
++       window enable Demo_Main_Message_MSOBJ
++       window enable Demo_Main_Size_MSOBJ
++       window enable Demo_Main_Search_MSOBJ
++       window enable Demo_Main_Edit_MSOBJ
++       window enable Demo_Main_Bitmap_MSOBJ
++       window enable Demo_Main_Chart_MSOBJ
++       window enable Demo_Main_Objects_MSOBJ
++   endif
+    return
+
+!a120_Demo_Protect_Hide_PBOBJ
+    window obtain Demo_Protect_WIN
+    window hide Demo_Protect_Cancel_PBOBJ
+    window hide Demo_Protect_Disable_PBOBJ
+    window hide Demo_Protect_Hide_PBOBJ
+    window hide Demo_Protect_Enable_PBOBJ
+    window hide Demo_Protect_Password_EFOBJ
+    window hide Demo_Protect_Password_STTXT
+    window hide Demo_Protect_Menu_CBOBJ
+    return
+
+!a120_Demo_Protect_Show_PBOBJ
+    window obtain Demo_Protect_WIN
+    window show Demo_Protect_Cancel_PBOBJ
+    window show Demo_Protect_Disable_PBOBJ
+    window show Demo_Protect_Hide_PBOBJ
+    window show Demo_Protect_Enable_PBOBJ
+    window show Demo_Protect_Password_EFOBJ
+    window show Demo_Protect_Password_STTXT
+    window show Demo_Protect_Menu_CBOBJ
+    return
+
+!a120_Demo_Draw_Cancel_PBOBJ
+    window obtain Demo_Draw_WIN
+    window close Demo_Draw_WIN
+    return
+
+!a120_Demo_Draw_Hide_PBOBJ
+    Demo_Draw_Data = ''
+    window draw Demo_Draw_WIN Demo_Draw_Data
+    window disable Demo_Draw_Hide_PBOBJ
+    window enable Demo_Draw_Show_PBOBJ
+    return
+
+!a120_Demo_Draw_Show_PBOBJ
+    call !a120_Demo_Draw_Data
+    window draw Demo_Draw_WIN Demo_Draw_Data
+    window enable Demo_Draw_Hide_PBOBJ
+    window disable Demo_Draw_Show_PBOBJ
+    return
+
+!a120_Demo_Draw_Data
+    Demo_Draw_Data = ''
+    //***********************************
+    //* Big Triangle
+    //***********************************
+    Demo_Draw_Data = "@Demo_Draw_Data@ COLOR RED"
+    Demo_Draw_Data = "@Demo_Draw_Data@ TEXTURE HALF"
+    Demo_Draw_Data = "@Demo_Draw_Data@ SHAPE 100 100 150 150 200 100 END"
+
+    //***********************************
+    //* Small Triangle
+    //***********************************
+    Demo_Draw_Data = "@Demo_Draw_Data@ COLOR BLUE"
+    Demo_Draw_Data = "@Demo_Draw_Data@ TEXTURE SOLID"
+    Demo_Draw_Data = "@Demo_Draw_Data@ SHAPE 120 110 150 140 180 110 END"
+
+    //***********************************
+    //* Big Box
+    //***********************************
+    Demo_Draw_Data = "@Demo_Draw_Data@ COLOR DARKBLUE"
+    Demo_Draw_Data = "@Demo_Draw_Data@ LINETYPE DOT"
+    Demo_Draw_Data = "@Demo_Draw_Data@ SHAPE 250 100 250 130 300 130 300 100 250 100 END"
+
+    //***********************************
+    //* Small Outline Box
+    //***********************************
+    Demo_Draw_Data = "@Demo_Draw_Data@ COLOR CYAN"
+    Demo_Draw_Data = "@Demo_Draw_Data@ NOFILL"
+    Demo_Draw_Data = "@Demo_Draw_Data@ LINETYPE DOT"
+    Demo_Draw_Data = "@Demo_Draw_Data@ SHAPE 255 105 255 125 295 125 295 105 255 105 END"
+    Demo_Draw_Data = "@Demo_Draw_Data@ FILL"
+
+    //***********************************
+    //* F
+    //***********************************
+    Demo_Draw_Data = "@Demo_Draw_Data@ COLOR RED"
+    Demo_Draw_Data = "@Demo_Draw_Data@ TEXTURE DIAG1"
+    Demo_Draw_Data = "@Demo_Draw_Data@ SHAPE"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 10 100"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 10 150"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 30 150"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 30 140"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 20 140"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 20 130"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 30 130"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 30 120"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 20 120"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 20 100"
+    Demo_Draw_Data = "@Demo_Draw_Data@ END "
+
+    //***********************************
+    //* Star
+    //***********************************
+    Demo_Draw_Data = "@Demo_Draw_Data@ COLOR GREEN"
+    Demo_Draw_Data = "@Demo_Draw_Data@ TEXTURE SOLID"
+    Demo_Draw_Data = "@Demo_Draw_Data@ SHAPE"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 347 97"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 365 150"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 383 97"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 340 130"
+    Demo_Draw_Data = "@Demo_Draw_Data@ 390 130"
+    Demo_Draw_Data = "@Demo_Draw_Data@ END "
+
+    Demo_Draw_Data = Demo_Draw_Data + "@Demo_Draw_Data2"
+    Demo_Draw_Data2 = ''
+    //***********************************
+    //* Text
+    //***********************************
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR BLACK"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ TEXT 50 170 50 B-Edit(PM) Demo Text $*$"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR BROWN"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ TEXT 48 168 50 B-Edit(PM) Demo Text $*$"
+
+    //***********************************
+    //* Diamond
+    //***********************************
+    Demo_Draw_Data = "@Demo_Draw_Data@ TEXTURE DENSE3"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR DARKGRAY"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 410 125"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 430 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 450 125"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 430 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+
+    //***********************************
+    //* Pattern
+    //***********************************
+    Demo_Draw_Data = "@Demo_Draw_Data@ TEXTURE SOLID"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR DARKRED"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 480 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 490 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 500 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 490 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR RED"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 490 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 500 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 510 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 500 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR PINK"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 500 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 510 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 520 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 510 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR YELLOW"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 510 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 520 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 530 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 520 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR GREEN"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 520 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 530 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 540 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 530 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR BLUE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 530 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 540 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 550 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 540 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR DARKBLUE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 540 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 550 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 560 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 550 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ COLOR BLACK"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ SHAPE"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 550 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 560 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 570 150"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ 560 100"
+    Demo_Draw_Data2 = "@Demo_Draw_Data2@ END "
+    
+    return
+
+!a120_Demo_Edit_Cancel_PBOBJ
+    window obtain Demo_Edit_WIN
+    window close Demo_Edit_WIN
+    return
+
+!a120_Demo_Size_Cancel_PBOBJ
+    window obtain Demo_Size_WIN
+    window close Demo_Size_WIN
+    SizeMove = 'n'
+    return
+
+!a120_Demo_Size_Small_PBOBJ
+    window color Demo_Size_Small_PBOBJ red
+    window color Demo_Size_Medium_PBOBJ black
+    window color Demo_Size_Large_PBOBJ black
+    window size Demo_Size_Small_PBOBJ 20 80 80 20
+    window size Demo_Size_Medium_PBOBJ 100 80 80 20
+    window size Demo_Size_Large_PBOBJ 180 80 80 20
+    return
+
+!a120_Demo_Size_Medium_PBOBJ
+    window color Demo_Size_Small_PBOBJ black
+    window color Demo_Size_Medium_PBOBJ red
+    window color Demo_Size_Large_PBOBJ black
+    window size Demo_Size_Small_PBOBJ 20 80 80 35
+    window size Demo_Size_Medium_PBOBJ 100 80 80 35
+    window size Demo_Size_Large_PBOBJ 180 80 80 35
+    return
+
+!a120_Demo_Size_Large_PBOBJ
+    window color Demo_Size_Small_PBOBJ black
+    window color Demo_Size_Medium_PBOBJ black
+    window color Demo_Size_Large_PBOBJ red
+    window size Demo_Size_Small_PBOBJ 20 80 80 90
+    window size Demo_Size_Medium_PBOBJ 100 80 80 90
+    window size Demo_Size_Large_PBOBJ 180 80 80 90
+    return
+
+!Demo_Select_OK_PBOBJ
+    window pointer wait
+    window obtain Demo_Select_WIN
+    close Searchfile error
+    open Searchfile @Demo_Select_File_EFOBJ error goto !Demo_Select_OK_PBOBJ_error
+    window pointer pointer
+
+    Demo_Search_List_LBOBJ = "ALL"
+    window clear Demo_Search_WIN
+    Demo_Search_File_EFOBJ = Demo_Select_File_EFOBJ
+
+    window open Demo_Search_WIN shade
+//    window center Demo_Search_WIN
+    window disable Demo_Search_File_EFOBJ
+    Demo_Search_Sensitive_RBOBJ = 'Y'
+    Demo_Search_Insensitive_RBOBJ = 'N'
+    window modify Demo_Search_Sensitive_RBOBJ
+    window setfocus Demo_Search_String_EFOBJ
+//    window font Demo_Search_List_LBOBJ 10.Fixed
+    window unshade Demo_Search_WIN 
+    return
+
+!Demo_Select_OK_PBOBJ_error
+    window pointer pointer
+    message = "The requested file doesn't exist!"
+    window message error ok
+    window setfocus Demo_Select_File_EFOBJ
+    return
+
+!Demo_Select_Cancel_PBOBJ
+    window close Demo_Search_WIN
+    window close Demo_Select_WIN
+    close Searchfile error
+    return
+
+!Demo_Search_OK_PBOBJ
+    window obtain Demo_Search_WIN
+    Demo_Search_List_LBOBJ = "ALL"
+    window delete Demo_Search_List_LBOBJ
+    if  (Demo_Search_Sensitive_RBOBJ)
++       case on
++   else
++       case off
++   endif
+    if  (Demo_Search_String_EFOBJ = null)
++       message = "Please enter a Search String first!"
++       window message error ok
++       window setfocus Demo_Search_String_EFOBJ
++       return
++   endif
+    window pointer wait
+    file Searchfile
+    b
+    Count = 0
+!Demo_Search_Loop
+    fs:/@Demo_Search_String_EFOBJ/
+    if  (eof)
++       goto !Demo_Search_Done
++   endif
+    Demo_Search_List_LBOBJ = "000000@lineno@"
+    splitr:/@Demo_Search_List_LBOBJ/;6
+    Demo_Search_List_LBOBJ = "@right@ @line@"
+    window insert end default Demo_Search_List_LBOBJ
+    Count ++
+    f
+    goto !Demo_Search_Loop
+!Demo_Search_Done
+    window pointer pointer
+    if  (Count = 0)
++       message = "No Matches Found!"
++       window message warning ok
++   endif
+    window setfocus Demo_Search_String_EFOBJ
+    return
+
+!Demo_Search_Cancel_PBOBJ
+    window close Demo_Search_WIN
+    close Searchfile error
+    window setfocus Demo_Select_File_EFOBJ
+    return
+
+!a120_Demo_Bitmap_Cancel_PBOBJ
+    window obtain Demo_Bitmap_WIN
+    window close Demo_Bitmap_WIN
+    return
+
+!a120_Demo_Bitmap_Next_PBOBJ
+    if  (Userbutton = "corners") Userbutton = "checkbox"    goto !a120_Set_UDOBJ
+    if  (Userbutton = "checkbox") Userbutton = "childsys"   goto !a120_Set_UDOBJ
+    if  (Userbutton = "childsys") Userbutton = "drive"      goto !a120_Set_UDOBJ
+    if  (Userbutton = "drive") Userbutton = "file"          goto !a120_Set_UDOBJ
+    if  (Userbutton = "file") Userbutton = "folder"         goto !a120_Set_UDOBJ
+    if  (Userbutton = "folder") Userbutton = "max"          goto !a120_Set_UDOBJ
+    if  (Userbutton = "max") Userbutton = "menuattch"       goto !a120_Set_UDOBJ
+    if  (Userbutton = "menuattch") Userbutton = "menucheck" goto !a120_Set_UDOBJ
+    if  (Userbutton = "menucheck") Userbutton = "min"       goto !a120_Set_UDOBJ
+    if  (Userbutton = "min") Userbutton = "program"         goto !a120_Set_UDOBJ
+    if  (Userbutton = "program") Userbutton = "restore"     goto !a120_Set_UDOBJ
+    if  (Userbutton = "restore") Userbutton = "sbdnarrow"   goto !a120_Set_UDOBJ
+    if  (Userbutton = "sbdnarrow") Userbutton = "sblfarrow" goto !a120_Set_UDOBJ
+    if  (Userbutton = "sblfarrow") Userbutton = "sbrgarrow" goto !a120_Set_UDOBJ
+    if  (Userbutton = "sbrgarrow") Userbutton = "sbuparrow" goto !a120_Set_UDOBJ
+    if  (Userbutton = "sbuparrow") Userbutton = "sizebox"   goto !a120_Set_UDOBJ
+    if  (Userbutton = "sizebox") Userbutton = "sysmenu"     goto !a120_Set_UDOBJ
+    if  (Userbutton = "sysmenu") Userbutton = "treeminus"   goto !a120_Set_UDOBJ
+    if  (Userbutton = "treeminus") Userbutton = "treeplus"  goto !a120_Set_UDOBJ
+    if  (Userbutton = "treeplus") Userbutton = "corners"    goto !a120_Set_UDOBJ
+    message = "logic error"
+    window message error ok
+    exit
+!a120_Set_UDOBJ
+    window bitmap Demo_Bitmap_User_UDOBJ @Userbutton
+    window enable Demo_Bitmap_User_UDOBJ
+    return
+
+!a120_Demo_Bitmap_Disable_PBOBJ
+    window disable Demo_Bitmap_User_UDOBJ
+    window disable Demo_Bitmap_User2_UDOBJ
+    window disable Demo_Bitmap_User3_UDOBJ
+    return
+
+!a120_Demo_Bitmap_Enable_PBOBJ
+    window enable Demo_Bitmap_User_UDOBJ
+    window enable Demo_Bitmap_User2_UDOBJ
+    window enable Demo_Bitmap_User3_UDOBJ
+    return
+ 
+!a120_Demo_Bitmap_User_UDOBJ
+    message = "The System Bitmap Button Has been Pressed!"
+    window message info ok
+    return
+
+!a120_Demo_Bitmap_User2_UDOBJ
+    message = "The Monochrome Bitmap Button Has been Pressed!"
+    window message info ok
+    return
+
+!a120_Demo_Bitmap_User3_UDOBJ
+    message = "The Color Bitmap Button Has been Pressed!"
+    window message info ok
+    return
+
+!a120_Demo_Chart_Cancel_PBOBJ
+    window obtain Demo_Chart_WIN
+    window close Demo_Chart_WIN
+    return
+
+!a120_Demo_Chart_Bar_PBOBJ
+    Demo_Chart_Type = "Bar"
+    call !a130_Demo_Chart_Var1_EFOBJ
+    call !a130_Demo_Chart_Var2_EFOBJ
+    call !a130_Demo_Chart_Var3_EFOBJ
+    return
+
+!a120_Demo_Chart_Line_PBOBJ
+    Demo_Chart_Type = "Line"
+    call !a130_Demo_Chart_Var1_EFOBJ
+    call !a130_Demo_Chart_Var2_EFOBJ
+    call !a130_Demo_Chart_Var3_EFOBJ
+    return
+
+!a120_Demo_Chart_Graph_PBOBJ
+    Demo_Chart_Type = "Graph"
+    call !a130_Demo_Chart_Var1_EFOBJ
+    call !a130_Demo_Chart_Var2_EFOBJ
+    call !a130_Demo_Chart_Var3_EFOBJ
+    return
+
+!a130_Demo_Chart_Var1_EFOBJ
+    window obtain Demo_Chart_Var1_EFOBJ
+    Chartdata = Demo_Chart_Var1_EFOBJ
+    if  (Chartdata > 100)
++       Chartdata = 100
++       Demo_Chart_Var1_EFOBJ = Chartdata
++   endif
+    if  (Chartdata < 1)
++       Chartdata = 0
++       Demo_Chart_Var1_EFOBJ = Chartdata
++   endif
+    window modify Demo_Chart_Var1_EFOBJ
+    Chartpos = Chartdata * 2
+    Chart_Var1 = Chartpos + 102
+    if  (Demo_Chart_Type = "Bar")
++       Demo_Chart_Draw = ''
++       window size Demo_Chart_Black1_STTXT 70 102 42 @Chartpos
++       window size Demo_Chart_Data1_STTXT 65 102 42 @Chartpos
++   else
++       window size Demo_Chart_Black1_STTXT 70 102 42 0
++       window size Demo_Chart_Data1_STTXT 65 102 42 0
++   endif
+    if  (Demo_Chart_Type = "Line")
++       Demo_Chart_Draw = ''
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ COLOR RED"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ NOFILL"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ SHAPE "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 @Chart_Var1@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 150 @Chart_Var2@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 @Chart_Var3@ END"
++   endif
+    if  (Demo_Chart_Type = "Graph")
++       Demo_Chart_Draw = ''
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ COLOR RED"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ FILL"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ SHAPE "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 102 "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 @Chart_Var1@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 150 @Chart_Var2@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 @Chart_Var3@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 102 END"
++   endif
+
+    window draw Demo_Chart_WIN Demo_Chart_Draw
+    
+    return
+
+!a130_Demo_Chart_Var2_EFOBJ
+    window obtain Demo_Chart_Var2_EFOBJ
+    Chartdata = Demo_Chart_Var2_EFOBJ
+    if  (Chartdata > 100)
++       Chartdata = 100
++       Demo_Chart_Var2_EFOBJ = Chartdata
++   endif
+    if  (Chartdata < 1)
++       Chartdata = 0
++       Demo_Chart_Var2_EFOBJ = Chartdata
++   endif
+    window modify Demo_Chart_Var2_EFOBJ
+    Chartpos = Chartdata * 2
+    Chart_Var2 = Chartpos + 102
+    if  (Demo_Chart_Type = "Bar")
++       Demo_Chart_Draw = ''
++       window size Demo_Chart_Black2_STTXT 140 102 42 @Chartpos
++       window size Demo_Chart_Data2_STTXT 135 102 42 @Chartpos
++   else
++       window size Demo_Chart_Black2_STTXT 140 102 42 0
++       window size Demo_Chart_Data2_STTXT 135 102 42 0
++   endif
+    if  (Demo_Chart_Type = "Line")
++       Demo_Chart_Draw = ''
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ COLOR RED"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ NOFILL"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ SHAPE "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 @Chart_Var1@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 150 @Chart_Var2@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 @Chart_Var3@ END"
++   endif
+    if  (Demo_Chart_Type = "Graph")
++       Demo_Chart_Draw = ''
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ COLOR RED"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ FILL"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ SHAPE "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 102 "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 @Chart_Var1@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 150 @Chart_Var2@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 @Chart_Var3@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 102 END"
++   endif
+    window draw Demo_Chart_WIN Demo_Chart_Draw
+    return
+
+!a130_Demo_Chart_Var3_EFOBJ
+    window obtain Demo_Chart_Var3_EFOBJ
+    Chartdata = Demo_Chart_Var3_EFOBJ
+    if  (Chartdata > 100)
++       Chartdata = 100
++       Demo_Chart_Var3_EFOBJ = Chartdata
++   endif
+    if  (Chartdata < 1)
++       Chartdata = 0
++       Demo_Chart_Var3_EFOBJ = Chartdata
++   endif
+    window modify Demo_Chart_Var3_EFOBJ
+    Chartpos = Chartdata * 2
+    Chart_Var3 = Chartpos + 102
+    if  (Demo_Chart_Type = "Bar")
++       Demo_Chart_Draw = ''
++       window size Demo_Chart_Black3_STTXT 210 102 42 @Chartpos
++       window size Demo_Chart_Data3_STTXT 205 102 42 @Chartpos
++   else
++       window size Demo_Chart_Black3_STTXT 210 102 42 0
++       window size Demo_Chart_Data3_STTXT 205 102 42 0
++   endif
+    if  (Demo_Chart_Type = "Line")
++       Demo_Chart_Draw = ''
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ COLOR RED"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ NOFILL"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ SHAPE "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 @Chart_Var1@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 150 @Chart_Var2@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 @Chart_Var3@ END"
++   endif
+    if  (Demo_Chart_Type = "Graph")
++       Demo_Chart_Draw = ''
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ COLOR RED"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ FILL"
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ SHAPE "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 102 "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 80 @Chart_Var1@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 150 @Chart_Var2@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 @Chart_Var3@ "
++       Demo_Chart_Draw = "@Demo_Chart_Draw@ 220 102 END"
++   endif
+    window draw Demo_Chart_WIN Demo_Chart_Draw
+    return
+
+!a120_Demo_Fields_Cancel_PBOBJ
+    window obtain Demo_Fields_WIN
+    window close Demo_Fields_WIN
+    return
+
+!a120_Demo_Fields_Disable_PBOBJ
+    window disable Demo_Fields_Check_CBOBJ
+    window disable Demo_Fields_Radio1_RBOBJ
+    window disable Demo_Fields_Radio2_RBOBJ
+    window disable Demo_Fields_Entry_EFOBJ
+    window disable Demo_Fields_List_LBOBJ
+    window disable Demo_Fields_Multilist_LBOBJ
+    window disable Demo_Fields_Simple_COOBJ
+    window disable Demo_Fields_Drop_COOBJ
+    window disable Demo_Fields_Droplist_COOBJ
+    window disable Demo_Fields_MLE_MLOBJ
+    window disable Demo_Fields_Cancel_PBOBJ
+    window disable Demo_Fields_Disable_PBOBJ
+    window disable Demo_Fields_User_UDOBJ
+    window disable Demo_Fields_Push_PBOBJ
+    window enable Demo_Fields_Enable_PBOBJ
+    window setfocus Demo_Fields_Enable_PBOBJ
+    return
+
+!a120_Demo_Fields_Enable_PBOBJ
+    window enable Demo_Fields_Check_CBOBJ
+    window enable Demo_Fields_Radio1_RBOBJ
+    window enable Demo_Fields_Radio2_RBOBJ
+    window enable Demo_Fields_Entry_EFOBJ
+    window enable Demo_Fields_List_LBOBJ
+    window enable Demo_Fields_Multilist_LBOBJ
+    window enable Demo_Fields_Simple_COOBJ
+    window enable Demo_Fields_Drop_COOBJ
+    window enable Demo_Fields_Droplist_COOBJ
+    window enable Demo_Fields_MLE_MLOBJ
+    window enable Demo_Fields_Cancel_PBOBJ
+    window enable Demo_Fields_Disable_PBOBJ
+    window enable Demo_Fields_User_UDOBJ
+    window enable Demo_Fields_Push_PBOBJ
+    window disable Demo_Fields_Enable_PBOBJ
+    window setfocus Demo_Fields_Cancel_PBOBJ
+    return
+
+!a120_Demo_Fields_Push_PBOBJ
+    Hold_Button = Demo_Fields_Push_PBOBJ
+    Demo_Fields_Push_PBOBJ = "~Pushed!!!"
+    window modify Demo_Fields_Push_PBOBJ
+    Demo_Fields_Push_PBOBJ = Hold_Button
+
+    window obtain Demo_Fields_WIN
+    window modify Demo_Fields_WIN
+    message = "Checkbox = [@Demo_Fields_Check_CBOBJ@]"
+    window message info ok
+    message = "Radio1 = [@Demo_Fields_Radio1_RBOBJ@]"
+    window message info ok
+    message = "Radio2 = [@Demo_Fields_Radio2_RBOBJ@]"
+    window message info ok
+    message = "Entry = [@Demo_Fields_Entry_EFOBJ@]"
+    window message info ok
+    message = "Listbox = [@Demo_Fields_List_LBOBJ@]"
+    window message info ok
+    Demo_Fields_Multilist_LBOBJ = "FIRST"
+    window obtain Demo_Fields_Multilist_LBOBJ
+!a120_Demo_Fields_Push_Loop
+    message = "Multiselect List = [@Demo_Fields_Multilist_LBOBJ@]"
+    window message info ok
+    Demo_Fields_Multilist_LBOBJ = "NEXT"
+    window obtain Demo_Fields_Multilist_LBOBJ
+    if  (Demo_Fields_Multilist_LBOBJ != null)
++       goto !a120_Demo_Fields_Push_Loop
+    message = "Simple Combobox = [@Demo_Fields_Simple_COOBJ@]"
+    window message info ok
+    message = "Dropdown Combobox = [@Demo_Fields_Drop_COOBJ@]"
+    window message info ok
+    message = "Dropdown List Combobox = [@Demo_Fields_Droplist_COOBJ@]"
+    window message info ok
+    message = "Multi Line Entry = [@Demo_Fields_MLE_MLOBJ@]"
+    window message info ok
+
+    Hold_Button = Demo_Fields_Push_PBOBJ
+    Demo_Fields_Push_PBOBJ = "~Push Button"
+    window modify Demo_Fields_Push_PBOBJ
+    Demo_Fields_Push_PBOBJ = Hold_Button
+
+    return
+
+!a120_Demo_Fields_User_UDOBJ
+    window obtain Demo_Fields_WIN
+    message = "User Defined Button was Pressed!"
+    window message info ok
+    return
+
+!a120_Demo_Fields_List_LBOBJ
+    window obtain Demo_Fields_List_LBOBJ
+//    message = "The Listbox has been Selected [@Demo_Fields_List_LBOBJ@]"
+//    window message info ok
+    Demo_Fields_Entry_EFOBJ = Demo_Fields_List_LBOBJ
+    window modify Demo_Fields_Entry_EFOBJ
+    return
+
+!a120_Demo_Fields_Multilist_LBOBJ
+    Demo_Fields_Multilist_LBOBJ = "FIRST"
+    window obtain Demo_Fields_Multilist_LBOBJ
+    message = "The Multi Select Listbox has been double Clicked [@Demo_Fields_Multilist_LBOBJ@]"
+    window message info ok
+!a120_multidouble_loop
+    Demo_Fields_Multilist_LBOBJ = "NEXT"
+    window obtain Demo_Fields_Multilist_LBOBJ
+    if  (Demo_Fields_Multilist_LBOBJ = null)
++       return
++   endif
+    message = "[@Demo_Fields_Multilist_LBOBJ@]"
+    window message info ok
+    goto !a120_multidouble_loop
+    return
+
+!a120_Demo_Paint_Undo_PBOBJ
+    PaintPosData = PaintPosDataUndo
+    PointsUndo = Points
+    if  (Points > 1)
++       PaintData = "@PaintPosData@ END"
++       window draw Demo_Paint_WIN PaintData
+    window disable Demo_Paint_Undo_PBOBJ
+    return
+ 
+!a120_Demo_Paint_Red_PBOBJ
+    PointsUndo = Points
+    PaintPosDataUndo = PaintPosData
+    if  (Points > 1)
++       PaintPosData = "@PaintPosData@ END COLOR RED SHAPE "
++   else
++       scanr:/@PaintPosData@/:word
++       PaintPosData = "@left@ COLOR RED SHAPE "
++   endif
+    Points = 0
+    window enable Demo_Paint_Undo_PBOBJ
+    window backcolor Demo_Paint_Undo_PBOBJ red
+    window color Demo_Paint_Undo_PBOBJ black
+    return
+
+!a120_Demo_Paint_Green_PBOBJ
+    PointsUndo = Points
+    PaintPosDataUndo = PaintPosData
+    if  (Points > 1)
++       PaintPosData = "@PaintPosData@ END COLOR GREEN SHAPE "
++   else
++       scanr:/@PaintPosData@/:word
++       PaintPosData = "@left@ COLOR GREEN SHAPE "
++   endif
+    Points = 0
+    window enable Demo_Paint_Undo_PBOBJ
+    window backcolor Demo_Paint_Undo_PBOBJ green
+    window color Demo_Paint_Undo_PBOBJ black
+    return
+
+!a120_Demo_Paint_Blue_PBOBJ
+    PointsUndo = Points
+    PaintPosDataUndo = PaintPosData
+    if  (Points > 1)
++       PaintPosData = "@PaintPosData@ END COLOR BLUE SHAPE "
++   else
++       scanr:/@PaintPosData@/:word
++       PaintPosData = "@left@ COLOR BLUE SHAPE "
++   endif
+    Points = 0
+    window enable Demo_Paint_Undo_PBOBJ
+    window backcolor Demo_Paint_Undo_PBOBJ blue
+    window color Demo_Paint_Undo_PBOBJ white
+    return
+ 
+!a120_Demo_Paint_Erase_PBOBJ
+    Points = 0
+    PaintData = ""
+    PaintPosData = "COLOR RED TEXTURE SOLID SHAPE "
+    window draw Demo_Paint_WIN PaintData
+    PointsUndo = Points
+    PaintPosDataUndo = PaintPosData
+    window backcolor Demo_Paint_Undo_PBOBJ red
+    window disable Demo_Paint_Undo_PBOBJ
+    return
+ 
+!a120_Demo_Paint_Cancel_PBOBJ
+    window obtain Demo_Paint_WIN
+    window close Demo_Paint_WIN
+    PaintOK = 'N'
+    return
+
+//************************************************************************
+//* Piano Note Push Buttons
+//************************************************************************
+!s100_C1
+    window sound 300 100
+    Sound = 'n'
+    window push Demo_Sound_C1S_PBOBJ
+    window push Demo_Sound_D1S_PBOBJ
+    window push Demo_Sound_F1S_PBOBJ
+    window push Demo_Sound_G1S_PBOBJ
+    window push Demo_Sound_A1S_PBOBJ
+    window push Demo_Sound_C2_PBOBJ
+    return
+
+!s100_D1
+    window sound 350 100
+    Sound = 'n'
+    window push Demo_Sound_C1S_PBOBJ
+    window push Demo_Sound_D1S_PBOBJ
+    window push Demo_Sound_F1S_PBOBJ
+    window push Demo_Sound_G1S_PBOBJ
+    window push Demo_Sound_A1S_PBOBJ
+    window push Demo_Sound_C2_PBOBJ
+    return
+
+!s100_E1
+    window sound 400 100
+    Sound = 'n'
+    window push Demo_Sound_C1S_PBOBJ
+    window push Demo_Sound_D1S_PBOBJ
+    window push Demo_Sound_F1S_PBOBJ
+    window push Demo_Sound_G1S_PBOBJ
+    window push Demo_Sound_A1S_PBOBJ
+    window push Demo_Sound_C2_PBOBJ
+    return
+
+!s100_F1
+    window sound 450 100
+    Sound = 'n'
+    window push Demo_Sound_C1S_PBOBJ
+    window push Demo_Sound_D1S_PBOBJ
+    window push Demo_Sound_F1S_PBOBJ
+    window push Demo_Sound_G1S_PBOBJ
+    window push Demo_Sound_A1S_PBOBJ
+    window push Demo_Sound_C2_PBOBJ
+    return
+
+!s100_G1
+    window sound 500 100
+    Sound = 'n'
+    window push Demo_Sound_C1S_PBOBJ
+    window push Demo_Sound_D1S_PBOBJ
+    window push Demo_Sound_F1S_PBOBJ
+    window push Demo_Sound_G1S_PBOBJ
+    window push Demo_Sound_A1S_PBOBJ
+    window push Demo_Sound_C2_PBOBJ
+    return
+
+!s100_A1
+    window sound 550 100
+    Sound = 'n'
+    window push Demo_Sound_C1S_PBOBJ
+    window push Demo_Sound_D1S_PBOBJ
+    window push Demo_Sound_F1S_PBOBJ
+    window push Demo_Sound_G1S_PBOBJ
+    window push Demo_Sound_A1S_PBOBJ
+    window push Demo_Sound_C2_PBOBJ
+    return
+
+!s100_B1
+    window sound 600 100
+    Sound = 'n'
+    window push Demo_Sound_C1S_PBOBJ
+    window push Demo_Sound_D1S_PBOBJ
+    window push Demo_Sound_F1S_PBOBJ
+    window push Demo_Sound_G1S_PBOBJ
+    window push Demo_Sound_A1S_PBOBJ
+    window push Demo_Sound_C2_PBOBJ
+    return
+
+!s100_C2
+    if  (!Sound)
++       Sound = 'y'
++       return
++   endif
+    window sound 650 100
+    return
+
+!s100_C1S
+    if  (!Sound)
++       return
++   endif
+    window sound 330 100
+    return
+
+!s100_D1S
+    if  (!Sound)
++       return
++   endif
+    window sound 380 100
+    return
+
+!s100_F1S
+    if  (!Sound)
++       return
++   endif
+    window sound 480 100
+    return
+
+!s100_G1S
+    if  (!Sound)
++       return
++   endif
+    window sound 530 100
+    return
+
+!s100_A1S
+    if  (!Sound)
++       return
++   endif
+    window sound 580 100
+    return
+
+!z999_return
+    return
+
+//*********************************************************************
+//*                    End of Program DEMO.BED                        *
+//*********************************************************************

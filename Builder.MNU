@@ -1,0 +1,13 @@
+**************************************
+*              M E N U               *
+**************************************
+TITLE,BeditWIN Builder System
+MENU,~Builder
+ITEM,Builder_Main_Build_MSOBJ,~Build
+--------------------
+ITEM,Builder_Main_Exit_MSOBJ,E~xit
+**************************************
+*              M E N U               *
+**************************************
+MENU,~Help
+ITEM,Builder_Main_About_MSOBJ,~About BEDITWIN Builder

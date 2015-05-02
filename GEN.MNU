@@ -1,0 +1,14 @@
+**************************************
+*              M E N U               *
+**************************************
+TITLE,B-Edit(PM) Navigation Code Generator
+MENU,~File
+ITEM,Gen_Main_Generate_MSOBJ,~Generate
+--------------------
+ITEM,Gen_Main_Exit_MSOBJ,E~xit
+
+**************************************
+*              M E N U               *
+**************************************
+MENU,~Help
+ITEM,Gen_Main_About_MSOBJ,~About Generator

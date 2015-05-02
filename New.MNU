@@ -1,0 +1,6 @@
+**************************************
+*              M E N U               *
+**************************************
+TITLE,New System
+MENU,~File
+ITEM,NewSystem_Test_MSOBJ,~Test Window

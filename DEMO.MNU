@@ -1,0 +1,35 @@
+**************************************
+*              M E N U               *
+**************************************
+TITLE,B-Edit(PM) Demo System
+MENU,~Demo
+ITEM,Demo_Main_Objects_MSOBJ,~Objects
+ITEM,Demo_Main_Edit_MSOBJ,~Edit
+ITEM,Demo_Main_Font_MSOBJ,~Fonts/Colors
+ITEM,Demo_Main_Protect_MSOBJ,~Protect
+ITEM,Demo_Main_Bitmap_MSOBJ,~Bitmap
+ITEM,Demo_Main_Draw_MSOBJ,~Draw
+ITEM,Demo_Main_Paint_MSOBJ,~Paint/Mouse
+--------------------
+ITEM,Demo_Main_Timer_MSOBJ,~Timer
+ITEM,Demo_Main_Size_MSOBJ,Si~ze
+--------------------
+ITEM,Demo_Main_Message_MSOBJ,~Message
+ITEM,Demo_Main_Sound_MSOBJ,~Sound
+ITEM,Demo_Main_Math_MSOBJ,M~ath
+ITEM,Demo_Main_Chart_MSOBJ,~Chart
+--------------------
+ITEM,Demo_Main_Search_MSOBJ,Searc~h a File for String
+--------------------
+ITEM,Demo_Main_Exit_MSOBJ,E~xit
+**************************************
+*              M E N U               *
+**************************************
+MENU,~Banner
+ITEM,Demo_Main_Headingon_MSOBJ,~On
+ITEM,Demo_Main_Headingoff_MSOBJ,O~ff
+**************************************
+*              M E N U               *
+**************************************
+MENU,~Help
+ITEM,Demo_Main_About_MSOBJ,~About B-Edit(PM) Demo

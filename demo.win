@@ -1,0 +1,308 @@
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Font_WIN,19,16,348,186,B-Edit(PM) Fonts/Colors Demo
+GBOBJ1,Demo_Font_CText_GBOBJ,16,27,88,249,Sample Colors
+RBOBJ1,Demo_Font_CDefault_RBOBJ,40,60,43,30,Default
+RBOBJ1,Demo_Font_CWhite_RBOBJ,40,90,47,30,White
+RBOBJ1,Demo_Font_CBlack_RBOBJ,40,120,47,30,Black
+RBOBJ1,Demo_Font_CBlue_RBOBJ,40,150,43,30,Blue
+RBOBJ1,Demo_Font_CRed_RBOBJ,40,180,32,30,Red
+RBOBJ1,Demo_Font_CGreen_RBOBJ,40,210,43,30,Green
+RBOBJ1,Demo_Font_CCyan_RBOBJ,40,240,32,30,Cyan
+GBOBJ1,Demo_Font_BText_GBOBJ,117,27,103,249,Sample Backgrounds
+RBOBJ1,Demo_Font_BDefault_RBOBJ,140,60,45,30,Default
+RBOBJ1,Demo_Font_BWhite_RBOBJ,140,90,40,30,White
+RBOBJ1,Demo_Font_BBlack_RBOBJ,141,120,42,30,Black
+RBOBJ1,Demo_Font_BBlue_RBOBJ,140,150,32,30,Blue
+RBOBJ1,Demo_Font_BRed_RBOBJ,140,180,32,30,Red
+RBOBJ1,Demo_Font_BGreen_RBOBJ,140,210,43,30,Green
+RBOBJ1,Demo_Font_BCyan_RBOBJ,140,240,32,30,Cyan
+GBOBJ1,Demo_Font_FText_GBOBJ,233,27,102,249,Sample Fonts
+RBOBJ1,Demo_Font_FDefault_RBOBJ,245,60,43,30,Default
+RBOBJ1,Demo_Font_F12Helv_RBOBJ,245,90,76,30,12 Point Helv
+RBOBJ1,Demo_Font_F14Times_RBOBJ,245,123,79,30,14 Point Times
+RBOBJ1,Demo_Font_F24Times_RBOBJ,245,150,80,30,24 Point Times
+RBOBJ1,Demo_Font_F8Courier_RBOBJ,245,180,78,30,8 Point Courier
+RBOBJ1,Demo_Font_F12Courier_RBOBJ,245,210,81,30,12 Point Courier
+RBOBJ1,Demo_Font_F10Fixed_RBOBJ,245,240,73,30,10 Point Fixed
+STTXT1,Demo_Font_Text_STTXT,19,306,84,81,Default
+EFOBJL,Demo_Font_Entry_EFOBJ,21,461,80,25,Sample Text
+LBOBJ1,Demo_Font_List_LBOBJ,118,309,103,183,
+MLOBJ1,Demo_Font_MLE_MLOBJ,234,312,102,180,
+STTXTR,Demo_Font_Rectangle_STTXT,4,288,339,9,
+PBOBJ1,Demo_Font_Cancel_PBOBJ,19,530,90,25,~Cancel
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Timer_WIN,105,68,157,109,B-Edit(PM) Timer Demo
+GBOBJ1,Demo_Font_Text_GBOBJ,21,24,102,225,Sample Intervals
+RBOBJ1,Demo_Timer_Off_RBOBJ,30,57,32,30,~Off
+RBOBJ1,Demo_Timer_1/2_RBOBJ,30,87,63,30,1~/10 Second
+RBOBJ1,Demo_Timer_1_RBOBJ,30,117,69,30,~1 Second
+RBOBJ1,Demo_Timer_5_RBOBJ,30,147,69,30,~5 Seconds
+RBOBJ1,Demo_Timer_10_RBOBJ,30,177,77,30,10 Seconds
+RBOBJ1,Demo_Timer_60_RBOBJ,30,207,73,30,~60 Seconds
+PBOBJ1,Demo_Timer_Cancel_PBOBJ,24,278,38,25,~Cancel
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Message_WIN,68,72,259,118,B-Edit(PM) Message Demo
+GBOBJ1,Demo_Message_TText_GBOBJ,11,39,108,213,Sample Types
+RBOBJ1,Demo_Message_Error_RBOBJ,25,87,54,30,Error
+RBOBJ1,Demo_Message_Warning_RBOBJ,25,120,70,30,Warning
+RBOBJ1,Demo_Message_Info_RBOBJ,25,150,74,30,Infomation
+RBOBJ1,Demo_Message_Question_RBOBJ,25,180,71,30,Question
+GBOBJ1,Demo_Message_BText_GBOBJ,127,39,124,216,Sample Buttons
+RBOBJ1,Demo_Message_OK_RBOBJ,140,87,32,30,OK
+RBOBJ1,Demo_Message_Okcancel_RBOBJ,140,120,73,30,OK/Cancel
+RBOBJ1,Demo_Message_Yesno_RBOBJ,140,147,86,30,Yes/No
+RBOBJ1,Demo_Message_Yesnocancel_RBOBJ,140,180,94,30,Yes/No/Cancel
+RBOBJ1,Demo_Message_Enter_RBOBJ,140,210,49,30,Enter
+PBOBJ1,Demo_Message_OK_PBOBJ,31,296,38,25,~OK
+PBOBJ1,Demo_Message_Cancel_PBOBJ,78,296,38,25,~Cancel
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Sound_WIN,91,67,199,124,B-Edit(PM) Sound Demonstration
+PBOBJ1,Demo_Sound_Cancel_PBOBJ,15,287,38,25,~Cancel
+PBOBJ1,Demo_Sound_Bell_PBOBJ,75,287,38,25,~Bell
+PBOBJ1,Demo_Sound_Music_PBOBJ,132,287,38,25,~Music
+PBOBJ1,Demo_Sound_C1S_PBOBJ,36,125,15,25,
+PBOBJ1,Demo_Sound_D1S_PBOBJ,55,125,15,25,
+PBOBJ1,Demo_Sound_F1S_PBOBJ,93,125,16,25,
+PBOBJ1,Demo_Sound_G1S_PBOBJ,111,125,15,25,
+PBOBJ1,Demo_Sound_A1S_PBOBJ,129,125,15,25,
+PBOBJ1,Demo_Sound_C1_PBOBJ,25,179,20,25,
+PBOBJ1,Demo_Sound_D1_PBOBJ,43,179,20,25,
+PBOBJ1,Demo_Sound_E1_PBOBJ,63,179,20,25,
+PBOBJ1,Demo_Sound_F1_PBOBJ,81,179,20,25,
+PBOBJ1,Demo_Sound_G1_PBOBJ,100,179,19,25,
+PBOBJ1,Demo_Sound_A1_PBOBJ,117,179,20,25,
+PBOBJ1,Demo_Sound_B1_PBOBJ,136,179,21,25,
+PBOBJ1,Demo_Sound_C2_PBOBJ,156,179,20,25,
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Protect_WIN,80,82,223,111,B-Edit(PM) Object Protection Demonstration
+STTXT1,Demo_Protect_Password_STTXT,31,42,66,21,Password Field
+EFOBJL,Demo_Protect_Password_EFOBJ,104,41,75,25,
+CBOBJA,Demo_Protect_Menu_CBOBJ,15,138,186,30,Enable/Disable Menu Selections Also
+PBOBJ1,Demo_Protect_Cancel_PBOBJ,4,278,38,25,~Cancel
+PBOBJ1,Demo_Protect_Disable_PBOBJ,55,278,38,25,~Disable
+PBOBJ1,Demo_Protect_Enable_PBOBJ,93,278,38,25,~Enable
+PBOBJ1,Demo_Protect_Hide_PBOBJ,141,278,38,25,~Hide
+PBOBJ1,Demo_Protect_Show_PBOBJ,179,278,38,25,~Show
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Edit_WIN,82,27,201,169,B-Edit(PM) Field Editing Demonstration
+STTXT1,Demo_Edit_Text_STTXT,30,33,20,24,Text
+STTXT1,Demo_Edit_Alpha_STTXT,30,78,28,24,Alpha
+STTXT1,Demo_Edit_Numeric_STTXT,30,123,39,24,Numeric
+STTXT1,Demo_Edit_Upper_STTXT,30,168,51,24,Upper Case
+STTXT1,Demo_Edit_Lower_STTXT,30,213,53,24,Lower Case
+STTXT1,Demo_Edit_Mixed_STTXT,30,258,56,24,Mixed Case
+STTXT1,Demo_Edit_Date_STTXT,30,303,20,24,Date
+STTXT1,Demo_Edit_Dollar_STTXT,29,345,34,24,Dollar
+STTXT1,Demo_Edit_Telephone_STTXT,30,393,45,24,Telephone
+EFOBJL,Demo_Edit_Text_EFOBJ,102,32,76,25,
+EFOBJL,Demo_Edit_Alpha_EFOBJ,102,77,76,25,
+EFOBJL,Demo_Edit_Numeric_EFOBJ,102,122,76,25,
+EFOBJL,Demo_Edit_Upper_EFOBJ,102,167,76,25,
+EFOBJL,Demo_Edit_Lower_EFOBJ,102,212,76,25,
+EFOBJL,Demo_Edit_Mixed_EFOBJ,102,257,75,25,
+EFOBJL,Demo_Edit_Date_EFOBJ,102,302,76,25,
+EFOBJL,Demo_Edit_Dollar_EFOBJ,102,347,76,25,
+EFOBJL,Demo_Edit_Telephone_EFOBJ,102,392,76,25,
+PBOBJ1,Demo_Edit_Cancel_PBOBJ,28,458,38,25,~Cancel
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Math_WIN,77,29,238,161,B-Edit(PM) Math Demonstration
+STTXT1,Demo_Math_Integer1_STTXT,17,30,42,24,Integer 1
+STTXT1,Demo_Math_Integer2_STTXT,118,30,41,24,Integer 2
+EFOBJR,Demo_Math_Integer1_EFOBJ,71,29,38,25,
+EFOBJR,Demo_Math_Integer2_EFOBJ,177,29,38,25,
+EFOBJR,Demo_Math_I1Sum_EFOBJ,17,80,39,25,
+EFOBJR,Demo_Math_I2Sum_EFOBJ,20,122,36,25,
+EFOBJR,Demo_Math_ISumResult_EFOBJ,17,188,39,25,
+EFOBJR,Demo_Math_I1Sub_EFOBJ,70,83,39,25,
+EFOBJR,Demo_Math_I2Sub_EFOBJ,73,122,36,25,
+EFOBJR,Demo_Math_ISubResult_EFOBJ,70,188,39,25,
+EFOBJR,Demo_Math_I1Mult_EFOBJ,124,83,39,25,
+EFOBJR,Demo_Math_I2Mult_EFOBJ,127,122,36,25,
+EFOBJR,Demo_Math_IMultResult_EFOBJ,124,188,39,25,
+EFOBJR,Demo_Math_I1Div_EFOBJ,177,83,39,25,
+EFOBJR,Demo_Math_I2Div_EFOBJ,180,122,36,25,
+EFOBJR,Demo_Math_IDivResult_EFOBJ,177,188,39,25,
+EFOBJR,Demo_Math_Dollar1_EFOBJ,71,233,38,25,
+EFOBJR,Demo_Math_Dollar2_EFOBJ,177,233,39,25,
+EFOBJR,Demo_Math_D1Sum_EFOBJ,18,293,39,25,
+EFOBJR,Demo_Math_D2Sum_EFOBJ,17,332,39,25,
+EFOBJR,Demo_Math_DSumResult_EFOBJ,17,389,39,25,
+EFOBJR,Demo_Math_D1Sub_EFOBJ,71,293,38,25,
+EFOBJR,Demo_Math_D2Sub_EFOBJ,71,335,38,25,
+EFOBJR,Demo_Math_DSubResult_EFOBJ,71,389,38,25,
+EFOBJR,Demo_Math_D1Mult_EFOBJ,125,290,38,25,
+EFOBJR,Demo_Math_D2Mult_EFOBJ,125,332,38,25,
+EFOBJR,Demo_Math_DMultResult_EFOBJ,125,389,38,25,
+EFOBJR,Demo_Math_D1Div_EFOBJ,177,290,39,25,
+EFOBJR,Demo_Math_D2Div_EFOBJ,177,335,39,25,
+EFOBJR,Demo_Math_DDivResult_EFOBJ,178,389,39,25,
+STTXT1,Demo_Math_Dollar1_STTXT,22,234,37,24,Dollar 1
+STTXT1,Demo_Math_Dollar2_STTXT,125,234,34,24,Dollar 2
+STTXTR,Demo_Math_Rect1_STTXT,16,159,45,6,
+STTXTR,Demo_Math_Rect2_STTXT,72,159,45,6,
+STTXTR,Demo_Math_Rect3_STTXT,127,159,45,6,
+STTXTR,Demo_Math_Rect4_STTXT,179,159,46,6,
+STTXTR,Demo_Math_Rect6_STTXT,16,366,44,6,
+STTXTR,Demo_Math_Rect7_STTXT,72,366,46,6,
+STTXTR,Demo_Math_Rect8_STTXT,127,366,46,6,
+STTXTR,Demo_Math_Rect9_STTXT,179,366,45,6,
+PBOBJ1,Demo_Math_Cancel_PBOBJ,17,443,38,25,~Cancel
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Size_WIN,89,49,203,115,B-Edit(PM) Move/Size Demonstration
+PBOBJ1,Demo_Size_Cancel_PBOBJ,13,290,38,25,~Cancel
+PBOBJ1,Demo_Size_Small_PBOBJ,15,140,38,25,~Small
+PBOBJ1,Demo_Size_Medium_PBOBJ,79,140,38,25,~Medium
+PBOBJ1,Demo_Size_Large_PBOBJ,140,140,38,25,~Large
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Select_WIN,83,107,286,86,B-Edit(PM) Search Demonstration
+STTXT1,Demo_Select_File_STTXT,10,69,20,24,File
+EFOBJL,Demo_Select_File_EFOBJ,34,65,237,25,
+PBOBJ1,Demo_Select_OK_PBOBJ,40,194,38,25,~OK
+PBOBJ1,Demo_Select_Cancel_PBOBJ,89,191,38,25,~Cancel
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Search_WIN,24,20,379,189,B-Edit(PM) Search Demonstration
+STTXT1,Demo_Search_File_STTXT,31,48,20,24,File
+EFOBJL,Demo_Search_File_EFOBJ,59,44,289,25,
+STTXT1,Demo_Search_Search_STTXT,23,102,33,24,Search
+EFOBJL,Demo_Search_String_EFOBJ,60,98,287,25,
+RBOBJ1,Demo_Search_Sensitive_RBOBJ,63,147,119,30,Search Sensitive
+RBOBJ1,Demo_Search_Insensitive_RBOBJ,63,186,92,30,Search Insensitive
+LBOBJ1,Demo_Search_List_LBOBJ,15,228,358,276,
+PBOBJ1,Demo_Search_OK_PBOBJ,48,530,38,25,~OK
+PBOBJ1,Demo_Search_Cancel_PBOBJ,93,527,38,25,~Cancel
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Bitmap_WIN,118,100,300,100,Test User Defined Bit Map
+UDOBJ1,Demo_Bitmap_User_UDOBJ,30,15,45,180,MYCONTROL
+UDOBJ1,Demo_Bitmap_User2_UDOBJ,90,15,75,180,MYCONTROL
+UDOBJ1,Demo_Bitmap_User3_UDOBJ,180,15,75,180,MYCONTROL
+PBOBJ1,Demo_Bitmap_Cancel_PBOBJ,5,233,40,25,~Cancel
+PBOBJ1,Demo_Bitmap_Disable_PBOBJ,50,233,40,25,~Disable
+PBOBJ1,Demo_Bitmap_Enable_PBOBJ,95,233,40,25,~Enable
+PBOBJ1,Demo_Bitmap_Next_PBOBJ,140,233,40,25,~Next
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Chart_WIN,96,35,205,150,B-Edit(PM) Bar Chart Demonstration
+STTXTR,Demo_Chart_Rect1_STTXT,35,12,2,294,
+STTXTR,Demo_Chart_Rect2_STTXT,36,303,137,6,Text
+STTXT1,Demo_Chart_100_STTXT,11,0,17,24,100
+STTXT1,Demo_Chart_50_STTXT,14,147,12,24,50
+STTXT1,Demo_Chart_0_STTXT,18,291,6,24,0
+STTXT1,Demo_Chart_Var1_STTXT,39,312,20,24,Var1
+STTXT1,Demo_Chart_Var2_STTXT,90,318,20,24,Var2
+STTXT1,Demo_Chart_Var3_STTXT,135,318,20,24,Var3
+EFOBJL,Demo_Chart_Var1_EFOBJ,39,344,22,25,
+EFOBJL,Demo_Chart_Var2_EFOBJ,86,347,26,25,
+EFOBJL,Demo_Chart_Var3_EFOBJ,134,347,24,25,
+PBOBJ1,Demo_Chart_Cancel_PBOBJ,25,407,40,25,~Cancel
+PBOBJ1,Demo_Chart_Bar_PBOBJ,70,407,40,25,~Bar
+PBOBJ1,Demo_Chart_Line_PBOBJ,115,407,40,25,~Line
+PBOBJ1,Demo_Chart_Graph_PBOBJ,160,407,40,25,~Graph
+STTXTR,Demo_Chart_Black1_STTXT,41,255,22,48,
+STTXTR,Demo_Chart_Black2_STTXT,88,255,21,48,
+STTXTR,Demo_Chart_Black3_STTXT,134,255,21,48,
+STTXTR,Demo_Chart_Data1_STTXT,41,255,22,48,
+STTXTR,Demo_Chart_Data2_STTXT,88,255,21,48,
+STTXTR,Demo_Chart_Data3_STTXT,134,255,21,48,
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Fields_WIN,19,18,395,182,B-Edit(PM) Objects Demonstration
+STTXT1,Demo_Fields_Text_STTXT,21,30,52,24,Static Text
+STTXTF,Demo_Fields_Frame_STTXT,68,72,44,15,
+STTXTR,Demo_Fields_Frame_STTXT,69,99,43,9,
+CBOBJA,Demo_Fields_Check_CBOBJ,27,126,60,30,Check ~Box
+GBOBJ1,Demo_Fields_Group_GBOBJ,24,165,69,102,Group Box
+RBOBJ1,Demo_Fields_Radio1_RBOBJ,33,195,47,30,Radio ~1
+RBOBJ1,Demo_Fields_Radio2_RBOBJ,33,225,50,30,Radio ~2
+STTXT1,Demo_Fields_Entry_STTXT,29,285,25,24,Entry
+EFOBJL,Demo_Fields_Entry_EFOBJ,60,284,51,25,
+LBOBJ1,Demo_Fields_List_LBOBJ,118,75,135,96,
+LBOBJM,Demo_Fields_Multilist_LBOBJ,118,216,136,96,
+STTXT1,Demo_Fields_List_STTXT,121,39,40,24,List Box
+STTXT1,Demo_Fields_Multilist_STTXT,121,183,97,24,Multi Select List Box
+COOBJS,Demo_Fields_Simple_COOBJ,281,72,64,96,
+STTXT1,Demo_Fields_Simple_STTXT,273,36,85,24,Simple Combo Box
+COOBJD,Demo_Fields_Drop_COOBJ,281,213,64,96,Text
+STTXT1,Demo_Fields_Drop_STTXT,270,183,100,24,Dropdown Combo Box
+STTXT1,Demo_Fields_Droplist_STTXT,269,267,115,24,Dropdown List Combo Box
+COOBJL,Demo_Fields_Droplist_COOBJ,283,303,64,96,
+MLOBJ1,Demo_Fields_MLE_MLOBJ,26,360,214,123,
+UDOBJ1,Demo_Fields_User_UDOBJ,274,387,69,129,MYCONTROL
+STTXT1,Demo_Fields_User_STTXT,268,354,90,24,User Defined Button
+STTXT1,Demo_Fields_MLE_STTXT,29,327,113,24,Multi Line Entry Field
+PBOBJ1,Demo_Fields_Cancel_PBOBJ,26,509,38,25,~Cancel
+PBOBJ1,Demo_Fields_Push_PBOBJ,75,506,70,25,~Push Button
+PBOBJ1,Demo_Fields_Disable_PBOBJ,170,506,40,25,~Disable
+PBOBJ1,Demo_Fields_Enable_PBOBJ,215,506,40,25,~Enable
+STTXT1,Demo_Fields_Framet_STTXT,21,63,30,24,Frame
+STTXT1,Demo_Fields_Rect1_STTXT,20,93,45,24,Rectangle
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Draw_WIN,80,82,400,111,B-Edit(PM) Object Drawing Demonstration
+PBOBJ1,Demo_Draw_Cancel_PBOBJ,4,278,38,25,~Cancel
+PBOBJ1,Demo_Draw_Hide_PBOBJ,141,278,38,25,~Hide
+PBOBJ1,Demo_Draw_Show_PBOBJ,179,278,38,25,~Show
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Music_WIN,52,46,289,137,B-Edit(PM) Music Demonstration
+STTXT1,Demo_Music_List_STTXT,8,45,94,24,Note              Duration
+LBOBJ1,Demo_Music_List_LBOBJ,5,75,118,258,
+STTXTR,Demo_Music_Divide_STTXT,179,0,2,408,
+PBOBJ1,Demo_Music_Play_PBOBJ,15,371,38,25,~Play
+PBOBJ1,Demo_Music_Cancel_PBOBJ,55,371,38,25,~Cancel
+PBOBJ1,Demo_Music_Clear_PBOBJ,95,371,38,25,Clea~r
+PBOBJ1,Demo_Music_Insert_PBOBJ,130,161,38,25,~Insert
+PBOBJ1,Demo_Music_Modify_PBOBJ,130,206,38,25,~Modify
+PBOBJ1,Demo_Music_Delete_PBOBJ,130,248,38,25,~Delete
+STTXT1,Demo_Music_Mode_STTXT,189,63,34,24,Mode :
+EFOBJL,Demo_Music_Mode_EFOBJ,228,62,53,25,
+STTXT1,Demo_Music_Note_STTXT,185,156,40,24,Note
+STTXT1,Demo_Music_Duration_STTXT,185,243,40,24,Duration
+EFOBJL,Demo_Music_Note_EFOBJ,237,155,39,25,
+EFOBJL,Demo_Music_Duration_EFOBJ,237,242,39,25,
+PBOBJ1,Demo_Music_Test_PBOBJ,191,371,38,25,~Test
+PBOBJ1,Demo_Music_Keep_PBOBJ,237,371,38,25,~Keep
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Demo_Paint_WIN,11,14,406,184,B-Edit(PM) Mouse Demo
+PBOBJ1,Demo_Paint_Cancel_PBOBJ,14,506,38,25,~Cancel
+PBOBJ1,Demo_Paint_Erase_PBOBJ,65,506,38,25,~Erase
+PBOBJ1,Demo_Paint_Red_PBOBJ,121,509,41,25,~Red
+STTXT1,Demo_Paint_Xpos_STTXT,356,480,8,24,X
+STTXT1,Demo_Paint_Ypos_STTXT,357,516,8,24,Y
+EFOBJL,Demo_Paint_Xpos_EFOBJ,370,479,27,25,Text
+EFOBJL,Demo_Paint_Ypos_EFOBJ,370,515,27,25,
+PBOBJ1,Demo_Paint_Green_PBOBJ,162,509,38,25,~Green
+PBOBJ1,Demo_Paint_Blue_PBOBJ,199,509,38,25,~Blue
+PBOBJ1,Demo_Paint_Undo_PBOBJ,249,509,38,25,~Undo
+GBOBJ1,Demo_Paint_Mouse_STTXT,305,450,98,99,Mouse
+RBOBJ1,Demo_Paint_On_RBOBJ,311,477,32,30,On
+RBOBJ1,Demo_Paint_Off_RBOBJ,311,513,32,30,Off
+STTXT1,Demo_Paint_Object_STTXT,200,-72,30,24,Mouse
+

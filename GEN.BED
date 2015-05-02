@@ -1,0 +1,2092 @@
+//***************************************************************************
+//* Program     : GEN.BED                                                   *
+//* Author      : Forrest Bentley                                           *
+//* Date        : July 7, 1992                                              *
+//* Desc        : This program will Generate BEDIT Navigation code based    *
+//*               on an input DLG and RC file.                              *
+//***************************************************************************
+//* Maintenance Log                                                         *
+//*                                                                         *
+//* Name                 Date       Description                             *
+//* -------------------- ---------- --------------------------------------- *
+//* Forrest Bentley      12-18-1992 Removed excess generated code           *
+//*                                 Added CURRDATE                          *
+//*                                 Finish without empty Listboxes          *
+//*                                 WindowInsert, WindowDelete logic        *
+//*                                 ZERO field editing                      *
+//*                      12-20-1992 New button logic                        *
+//*                                 Update BED file                         *
+//*                      12-28-1992 Additional generated comments           *
+//*                      01-11-1993 Added Menu window and logic             *
+//*                      02-12-1993 Added Crush to Menu Name                *
+//***************************************************************************
+
+    //*****************************************
+    //* Working Storage                       *
+    //*****************************************
+//    logfile gen.log
+    logfile null
+    string  Newline
+    string  MainWindow
+
+    string  Winfile
+    string  Menufile
+    string  Navfile
+    string  OldNavfile
+    string  Editfile
+    string  Bedfile
+    string  Miscfile
+
+    string  Nomenu
+    integer Size
+    string  Type
+    string  Object
+    string  Window
+    string  Action
+    string  Temp
+    string  Done
+    string  Systemcmd
+
+    string  UpdateBED
+
+    integer Index
+    integer Selected
+    string  Mode
+    string  Status
+
+    //*****************************************
+    //* Menu Selection Actions   		      *
+    //*****************************************
+    string Gen_Main_Generate_MSOBJ                = "call !Gen_Main_Generate_MSOBJ"
+    string Gen_Main_Exit_MSOBJ                    = "call !Gen_Main_Exit_MSOBJ"
+    string Gen_Main_About_MSOBJ                   = "call !Gen_Main_About_MSOBJ"
+
+    //*****************************************
+    //* Gen_Misc_WIN Actions                  *
+    //*****************************************
+    string Gen_Misc_OK_PBOBJ                      = "call !Gen_Misc_OK_PBOBJ"
+    string Gen_Misc_Cancel_PBOBJ                  = "call !Gen_Misc_Cancel_PBOBJ"
+    string Gen_Misc_Nav_PBOBJ                     = "call !Gen_Misc_Nav_PBOBJ"
+    string Gen_Misc_Entry_PBOBJ                   = "call !Gen_Misc_Entry_PBOBJ"
+    string Gen_Misc_Menu_PBOBJ                    = "call !Gen_Misc_Menu_PBOBJ"
+
+    string Gen_Menu_OK_PBOBJ                     = "call !Gen_Menu_OK_PBOBJ"
+    string Gen_Menu_Cancel_PBOBJ                 = "call !Gen_Menu_Cancel_PBOBJ"
+    string Gen_Menu_Insert_PBOBJ                 = "call !Gen_Menu_Insert_PBOBJ"
+    string Gen_Menu_Modify_PBOBJ                 = "call !Gen_Menu_Modify_PBOBJ"
+    string Gen_Menu_Delete_PBOBJ                 = "call !Gen_Menu_Delete_PBOBJ"
+    string Gen_Menu_Keep_PBOBJ                   = "call !Gen_Menu_Keep_PBOBJ"
+
+    string Gen_Menu_Title_EFOBJ                  = "call !a130_Gen_Menu_Title_EFOBJ"
+    window action Gen_Menu_Title_EFOBJ
+    window edit Gen_Menu_Title_EFOBJ TEXT 99
+
+    string Gen_Menu_Text_EFOBJ                  = "call !a130_Gen_Menu_Text_EFOBJ"
+    window action Gen_Menu_Text_EFOBJ
+    window edit Gen_Menu_Text_EFOBJ TEXT 19
+
+    string Gen_Menu_Name_EFOBJ                  = "call !a130_Gen_Menu_Name_EFOBJ"
+    window action Gen_Menu_Name_EFOBJ
+    window edit Gen_Menu_Name_EFOBJ TEXT 20
+
+    string Gen_Edit_Size_EFOBJ                    = "call !a130_Gen_Edit_Size_EFOBJ"
+    window action Gen_Edit_Size_EFOBJ
+    window edit Gen_Edit_Size_EFOBJ NUMERIC 3
+
+    string Gen_Misc_Author_EFOBJ                  = "call !a130_Gen_Misc_Author_EFOBJ"
+    window action Gen_Misc_Author_EFOBJ
+    window edit Gen_Misc_Author_EFOBJ MIX 50
+ 
+    string Gen_Misc_Desc1_EFOBJ                   = "call !a130_Gen_Misc_Desc1_EFOBJ"
+    window action Gen_Misc_Desc1_EFOBJ
+    window edit Gen_Misc_Desc1_EFOBJ MIX 50
+ 
+    string Gen_Misc_Desc2_EFOBJ                   = "call !a130_Gen_Misc_Desc2_EFOBJ"
+    window action Gen_Misc_Desc2_EFOBJ
+    window edit Gen_Misc_Desc2_EFOBJ MIX 50
+ 
+    string Gen_Misc_Desc3_EFOBJ                   = "call !a130_Gen_Misc_Desc3_EFOBJ"
+    window action Gen_Misc_Desc3_EFOBJ
+    window edit Gen_Misc_Desc3_EFOBJ MIX 50
+ 
+    string Gen_Misc_Desc4_EFOBJ                   = "call !a130_Gen_Misc_Desc4_EFOBJ"
+    window action Gen_Misc_Desc4_EFOBJ
+    window edit Gen_Misc_Desc4_EFOBJ MIX 50
+ 
+    string Gen_Misc_Desc5_EFOBJ                   = "call !a130_Gen_Misc_Desc5_EFOBJ"
+    window action Gen_Misc_Desc5_EFOBJ
+    window edit Gen_Misc_Desc5_EFOBJ MIX 50
+ 
+    string Gen_Misc_Name_EFOBJ                    = "call !a130_Gen_Misc_Name_EFOBJ"
+    window action Gen_Misc_Name_EFOBJ
+    window edit Gen_Misc_Name_EFOBJ MIX 50
+ 
+    string Gen_Misc_Prefix_EFOBJ                  = "call !a130_Gen_Misc_Prefix_EFOBJ"
+    window action Gen_Misc_Prefix_EFOBJ
+    window edit Gen_Misc_Prefix_EFOBJ UPPER 5
+
+    //*****************************************
+    //* Gen_Nav_WIN Actions                   *
+    //*****************************************
+    string Gen_Nav_Set_PBOBJ                      = "call !Gen_Nav_Set_PBOBJ"
+    string Gen_Nav_Delete_PBOBJ                   = "call !Gen_Nav_Delete_PBOBJ"
+    string Gen_Nav_Finished_PBOBJ                 = "call !Gen_Nav_Finished_PBOBJ"
+    string Gen_Nav_Unselect_PBOBJ                 = "call !Gen_Nav_Unselect_PBOBJ"
+    string Gen_Nav_Cancel_PBOBJ                   = "call !Gen_Nav_Cancel_PBOBJ"
+    string Gen_Nav_Menus_LBOBJ                    = "window push Gen_Nav_Set_PBOBJ"
+    window action Gen_Nav_Menus_LBOBJ
+    string Gen_Nav_Buttons_LBOBJ                  = "window push Gen_Nav_Set_PBOBJ"
+    window action Gen_Nav_Buttons_LBOBJ
+    string Gen_Nav_Navigation_LBOBJ               = "window push Gen_Nav_Delete_PBOBJ"
+    window action Gen_Nav_Navigation_LBOBJ
+    string Gen_Nav_Windows_LBOBJ                  = "window push Gen_Nav_Set_PBOBJ"
+    window action Gen_Nav_Windows_LBOBJ
+
+    string Gen_Menu_List_LBOBJ                    = "window push Gen_Menu_Modify_PBOBJ"
+    window action Gen_Menu_List_LBOBJ
+
+    //*****************************************
+    //* Gen_Edit_WIN Actions                  *
+    //*****************************************
+    string Gen_Edit_Set_PBOBJ                     = "call !Gen_Edit_Set_PBOBJ"
+    string Gen_Edit_Finished_PBOBJ                = "call !Gen_Edit_Finished_PBOBJ"
+    string Gen_Edit_Cancel_PBOBJ                  = "call !Gen_Edit_Cancel_PBOBJ"
+    string Gen_Edit_Delete_PBOBJ                  = "call !Gen_Edit_Delete_PBOBJ"
+    string Gen_Edit_Fields_LBOBJ                  = "window push Gen_Edit_Set_PBOBJ"
+    window action Gen_Edit_Fields_LBOBJ
+    string Gen_Edit_Edit_LBOBJ                    = "window push Gen_Edit_Delete_PBOBJ"
+    window action Gen_Edit_Edit_LBOBJ
+    string Gen_Edit_Date_RBOBJ                    = "Gen_Edit_Size_EFOBJ = '10' window modify Gen_Edit_Size_EFOBJ"
+    window action Gen_Edit_Date_RBOBJ
+    string Gen_Edit_Currdate_RBOBJ                = "Gen_Edit_Size_EFOBJ = '10' window modify Gen_Edit_Size_EFOBJ"
+    window action Gen_Edit_Currdate_RBOBJ
+    string Gen_Edit_Telephone_RBOBJ               = "Gen_Edit_Size_EFOBJ = '14' window modify Gen_Edit_Size_EFOBJ"
+    window action Gen_Edit_Telephone_RBOBJ
+
+    string Gen_Build_Message_EFOBJ
+    window edit Gen_Build_Message_EFOBJ TEXT 80
+
+    //*****************************************
+    //* Special Actions 		              *
+    //*****************************************
+    string WindowInit                             = "call !WindowInit"
+    string WindowWrap                             = "call !WindowWrap"
+    string WindowTimer                            = "call !WindowTimer"
+
+//*****************************************
+//* Startup				                  *
+//*****************************************
+!a100_startup
+    //*********************************
+    //* Set up GEN Window File 
+    //*********************************
+    string WINFILE error
+    WINFILE = "gen.win"
+    Status = "Good"
+    open WindowFile @WINFILE error Status = "BAD" 
+    if  (Status = "BAD")
++       WINFILE = "w:\applic\bedit\gen.win" 
++       open WindowFile @WINFILE error print:"Unable to read GEN.WIN" exit
++   endif
+
+    //*********************************
+    //* Set up GEN Window File 
+    //*********************************
+    string MNUFILE error
+    MNUFILE = "gen.mnu"
+    Status = "Good"
+    open MenuFile @MNUFILE error Status = "BAD" 
+    if  (Status = "BAD")
++       MNUFILE = "w:\applic\bedit\gen.mnu" 
++       open MenuFile @MNUFILE error print:"Unable to read GEN.MNU" exit
++   endif
+    
+    //*********************************
+    //* PM Main Process 
+    //*********************************
+    window start
+//    print:"Processing complete."
+    exit
+
+//***************************************************************************
+//* Task Tracking System PM Action Logic                                    *
+//***************************************************************************
+//*****************************************
+//* Main Window Initialization Routine	  *
+//*****************************************
+!WindowInit
+//    trace=log
+    call !Gen_Main_Generate_MSOBJ
+    window timer on 1
+    return
+
+//*****************************************
+//* Main Window Wrapup Routine		      *
+//*****************************************
+!WindowWrap
+    return
+
+//*****************************************
+//* Timer Routine			              *
+//*****************************************
+!WindowTimer
+    MainWindow = "B-Edit(PM) Code Generator - [@date@ @time@]"
+    window title MainWindow
+    return
+
+//***************************************************************************
+//* B-Edit(PM) Navigation Code Generator - Main Menu Actions                *
+//***************************************************************************
+//*****************************************
+//* Gen_Main_Generate_MSOBJ               *
+//*****************************************
+!Gen_Main_Generate_MSOBJ
+    window close Gen_Nav_WIN
+    window close Gen_Edit_WIN
+    window close Gen_Build_WIN
+    window open Gen_Misc_WIN
+    Gen_Misc_WIN = "B-Edit(PM) Code Generator - Initialization"
+    window title Gen_Misc_WIN
+    window center Gen_Misc_WIN
+    window clear Gen_Misc_WIN
+    Gen_Misc_Us_RBOBJ = 'Y'
+    window modify Gen_Misc_Us_RBOBJ
+    return
+
+//*****************************************
+//* Gen_Main_Exit_MSOBJ                   *
+//*****************************************
+!Gen_Main_Exit_MSOBJ
+    message = "Exit verification, are you sure?"
+    window message warning yesno
+    if  (message)
++       window stop
++       return
++   else
++       return
++   endif
+
+//*****************************************
+//* Gen_Main_About_MSOBJ                  *
+//*****************************************
+!Gen_Main_About_MSOBJ
+    message = "This system will Generate B-Edit(PM) code based on input .WIN"
+    message = "@message@ and .MNU files. All navigation code will be supplied"
+    message = "@message@ based on list box selections."
+    message = "@message@ A .NAV file will be produced containing all of the navigation"
+    message = "@message@ selected. A .EDT file will also be produced containing all of"
+    message = "@message@ the entry field edit definitions. The system is completly restartable"
+    message = "@message@ so, after you have generated once and want to change the Navigation"
+    message = "@message@ or Editing, just regenerate the system."
+    window message info ok
+    return
+
+//***************************************************************************
+//* B-Edit(PM) Navigation Code Generator - Gen_Misc_WIN Actions             *
+//***************************************************************************
+//*****************************************
+//* Gen_Misc_OK_PBOBJ                     *
+//*****************************************
+!Gen_Misc_OK_PBOBJ
+    window obtain Gen_Misc_WIN
+    if  (Gen_Misc_Prefix_EFOBJ = null)
++       message = "Please enter a System Prefix!"
++       window message error ok
++       window setfocus Gen_Misc_Prefix_EFOBJ
++       return
++   endif
+    Winfile = "@Gen_Misc_Prefix_EFOBJ@.WIN"
+    if  (!exists @Winfile) return
+
+    close Bedfile error
+    open Bedfile null
+
+    if  (Gen_Misc_Name_EFOBJ = null)
++       message = "Please enter a System Name!"
++       window message error ok
++       window setfocus Gen_Misc_Name_EFOBJ
++       return
++   endif
+    if  (Gen_Misc_Author_EFOBJ = null)
++       message = "Please enter an Author!"
++       window message error ok
++       window setfocus Gen_Misc_Author_EFOBJ
++       return
++   endif
+    if  (Gen_Misc_Desc1_EFOBJ = null)
++       message = "Please enter a Description!"
++       window message error ok
++       window setfocus Gen_Misc_Desc1_EFOBJ
++       return
++   endif
+    close Miscfile error
+    open Miscfile null
+    i:/@Gen_Misc_Name_EFOBJ@/
+    i:/@Gen_Misc_Author_EFOBJ@/
+    i:/@Gen_Misc_Desc1_EFOBJ@/
+    i:/@Gen_Misc_Desc2_EFOBJ@/
+    i:/@Gen_Misc_Desc3_EFOBJ@/
+    i:/@Gen_Misc_Desc4_EFOBJ@/
+    i:/@Gen_Misc_Desc5_EFOBJ@/
+    Miscfile = "@Gen_Misc_Prefix_EFOBJ@.msc"
+    write Miscfile @Miscfile
+    close Miscfile
+    window close Gen_Misc_WIN
+    window pointer wait
+    close Navfile error
+    Navfile = "@Gen_Misc_Prefix_EFOBJ@.na1"
+    open Navfile @Navfile error open Navfile null
+    close OldNavfile error
+    OldNavfile = "@Gen_Misc_Prefix_EFOBJ@.na2"
+    if  (!exists @OldNavfile) OldNavfile = "@Gen_Misc_Prefix_EFOBJ@.na1"
+    open OldNavfile @OldNavfile error open OldNavfile null
+    close Editfile error
+    Editfile = "@Gen_Misc_Prefix_EFOBJ@.edt"
+    open Editfile @Editfile error open Editfile null
+    call !c100_build_bed
+    window pointer arrow
+    message = "The B-Edit(PM) Code has been built. The output file is located at"
+    message = "@message@ @Gen_Misc_Prefix_EFOBJ@.BED. To Run the system enter"
+    message = "@message@ BEDITWIN CALL @Gen_Misc_Prefix_EFOBJ@."
+    window message info ok
+    return
+
+!Gen_Misc_Nav_PBOBJ
+    Winfile = "@Gen_Misc_Prefix_EFOBJ@.WIN"
+    if  (!exists @Winfile) return
+    window pointer wait
+    window open Gen_Nav_WIN shade
+    window center Gen_Nav_WIN
+    window clear Gen_Nav_WIN
+    Gen_Nav_Open_RBOBJ = 'Y'
+    window modify Gen_Nav_Open_RBOBJ
+    close Navfile error
+    Navfile = "@Gen_Misc_Prefix_EFOBJ@.na1"
+    open Navfile @Navfile error open Navfile null
+    call !b100_load_lists
+    Gen_Nav_WIN = "B-Edit(PM) Code Generator - Navigation for @Gen_Misc_Prefix_EFOBJ@"
+    window title Gen_Nav_WIN
+    window unshade Gen_Nav_WIN
+    return
+
+!Gen_Misc_Menu_PBOBJ
+    Winfile = "@Gen_Misc_Prefix_EFOBJ@.WIN"
+    if  (!exists @Winfile) return
+    window pointer wait
+    window open Gen_Menu_WIN shade
+    window center Gen_Menu_WIN
+    window clear Gen_Menu_WIN
+    window font Gen_Menu_List_LBOBJ 10.Fixed
+    Gen_Menu_Menu_RBOBJ = 'Y'
+    window modify Gen_Menu_Menu_RBOBJ
+    Gen_Menu_System_EFOBJ = Gen_Misc_Prefix_EFOBJ
+    mix Gen_Menu_System_EFOBJ
+    window modify Gen_Menu_System_EFOBJ
+    window disable Gen_Menu_System_EFOBJ
+    Gen_Menu_Main_EFOBJ = "_Main_"
+    window modify Gen_Menu_Main_EFOBJ
+    window disable Gen_Menu_Main_EFOBJ
+    Gen_Menu_Type_EFOBJ = "_MSOBJ"
+    window modify Gen_Menu_Type_EFOBJ
+    window disable Gen_Menu_Type_EFOBJ
+    close Menufile error
+    Menufile = "@Gen_Misc_Prefix_EFOBJ@.mnu"
+    open Menufile @Menufile error window pointer arrow window close Gen_Menu_WIN return
+    call !b050_load_menu
+    Gen_Menu_WIN = "B-Edit(PM) Code Generator - Main Menu Maintenance for @Gen_Misc_Prefix_EFOBJ@"
+    window title Gen_Menu_WIN
+    if  (Gen_Menu_Title_EFOBJ != null) window setfocus Gen_Menu_List_LBOBJ
+    Gen_Menu_List_LBOBJ = "INDEX=1"
+    window select Gen_Menu_List_LBOBJ
+    Gen_Menu_Mode_STTXT = "Insert Mode"
+    Mode = "Insert"
+    window modify Gen_Menu_Mode_STTXT
+    window unshade Gen_Menu_WIN
+    window pointer arrow
+    return
+
+!Gen_Misc_Entry_PBOBJ
+    Winfile = "@Gen_Misc_Prefix_EFOBJ@.WIN"
+    if  (!exists @Winfile) return
+    window open Gen_Edit_WIN shade
+    window center Gen_Edit_WIN
+    window clear Gen_Edit_WIN
+    Gen_Edit_Text_RBOBJ = 'Y'
+    Gen_Edit_Size_EFOBJ = '32'
+    window modify Gen_Edit_WIN
+    close Editfile error
+    Editfile = "@Gen_Misc_Prefix_EFOBJ@.edt"
+    open Editfile @Editfile error open Editfile null
+    call !b400_insert_edits
+    window pointer wait
+    window pointer arrow
+    Gen_Edit_Fields_LBOBJ = "INDEX=1"
+    window select Gen_Edit_Fields_LBOBJ
+    Gen_Edit_Fields_LBOBJ = null
+    Gen_Edit_WIN = "B-Edit(PM) Code Generator - Editing @Gen_Misc_Prefix_EFOBJ@"
+    window title Gen_Edit_WIN
+    window unshade Gen_Edit_WIN
+    return
+
+!Gen_Misc_OK_PBOBJ_error
+    message = "Unable to Open @Winfile@"
+    window message error ok
+    window setfocus Gen_Misc_Prefix_EFOBJ
+    return
+
+//*****************************************
+//* Gen_Misc_Cancel_PBOBJ                 *
+//*****************************************
+!Gen_Misc_Cancel_PBOBJ
+    message = "Cancel, Are You Sure?"
+    window message question yesno
+    if  (message)
++       window close Gen_Misc_WIN
++   endif
+    return
+
+//*****************************************
+//* Gen_Menu_OK_PBOBJ                     *
+//*****************************************
+!Gen_Menu_OK_PBOBJ
+    window pointer wait
+    window obtain Gen_Menu_Title_EFOBJ
+    if  (Gen_Menu_Title_EFOBJ = null)
++       message = "Please enter a Title"
++       window message error ok
++       window setfocus Gen_Menu_Title_EFOBJ
++       window pointer arrow
++       return
++   endif
+    close Menufile error
+    open Menufile null
+    i:"**********************************************************"
+    i:"* TITLE                                                  *"
+    i:"**********************************************************"
+    Newline = "TITLE,@Gen_Menu_Title_EFOBJ@"
+    pack Newline
+    i:/@Newline/
+    Index = 0
+    do
+        Index ++
+        Gen_Menu_List_LBOBJ = "INDEX=@Index@"
+        window obtain Gen_Menu_List_LBOBJ
+        if  (Gen_Menu_List_LBOBJ != null)
+            call !Gen_Menu_List_Process
+    until (Gen_Menu_List_LBOBJ = null)
+    write Menufile @Menufile
+    window close Gen_Menu_WIN
+    window pointer arrow
+    return
+
+!Gen_Menu_List_Process
+    split:/@Gen_Menu_List_LBOBJ/;1
+    if  (left != ' ')
++       goto !Gen_Menu_List_Proc_Menu
++   endif
+    split:/@Gen_Menu_List_LBOBJ/;20
+    split:/@right/;1
+    if  (left = '-')
++       goto !Gen_Menu_List_Proc_Separator
++   endif
+    split:/@Gen_Menu_List_LBOBJ/;20
+    split:/@right/;20
+    Newline = "ITEM,@right@"
+    pack Newline
+    Newline = "@Newline@,@left@"
+!Gen_Menu_List_Proc_Insert
+    pack Newline
+    i:/@Newline/
+    return
+
+!Gen_Menu_List_Proc_Menu
+    Newline = "MENU,@Gen_Menu_List_LBOBJ@"
+    pack Newline
+    if  (Newline = 'MENU,') return
+    i:"**********************************************************"
+    i:"* MENU                                                   *"
+    i:"**********************************************************"
+    goto !Gen_Menu_List_Proc_Insert
+
+!Gen_Menu_List_Proc_Separator
+    Newline = "------------------------------"
+    goto !Gen_Menu_List_Proc_Insert
+
+//*****************************************
+//* Gen_Menu_Cancel_PBOBJ                 *
+//*****************************************
+!Gen_Menu_Cancel_PBOBJ
+    message = "Cancel, Are You Sure?"
+    window message question yesno
+    if  (message)
++       window close Gen_Menu_WIN
++   endif
+    return
+
+//*****************************************
+//* Gen_Menu_Insert_PBOBJ                 *
+//*****************************************
+!Gen_Menu_Insert_PBOBJ
+    Gen_Menu_Mode_STTXT = "Insert Mode"
+    Mode = "Insert"
+    window modify Gen_Menu_Mode_STTXT
+    Gen_Menu_Text_EFOBJ = null
+    window modify Gen_Menu_Text_EFOBJ
+    Gen_Menu_Name_EFOBJ = null
+    window modify Gen_Menu_Name_EFOBJ
+    window setfocus Gen_Menu_Text_EFOBJ
+    window default Gen_Menu_Keep_PBOBJ
+    return
+
+//*****************************************
+//* Gen_Menu_Modify_PBOBJ                 *
+//*****************************************
+!Gen_Menu_Modify_PBOBJ
+    Gen_Menu_Mode_STTXT = "Modify Mode"
+    Mode = "Modify"
+    Gen_Menu_List_LBOBJ = null
+    window obtain Gen_Menu_List_LBOBJ
+    split:/@Gen_Menu_List_LBOBJ/;1
+    if  (left != ' ') goto !Gen_Menu_Modify_Menu
+    split:/@Gen_Menu_List_LBOBJ/;20
+    split:/@right/;1
+    if  (left = '-') goto !Gen_Menu_Modify_Separator
+    split:/@Gen_Menu_List_LBOBJ/;20
+    split:/@right/;20
+    Gen_Menu_Text_EFOBJ = left
+    scan:/@right/:/_/
+    scan:/@right/:/_/
+    scan:/@right/:/_/
+    Gen_Menu_Name_EFOBJ = left
+    Gen_Menu_Item_RBOBJ = 'Y'
+    window modify Gen_Menu_Item_RBOBJ
+!Gen_Menu_Modify_Screen
+    pack Gen_Menu_Text_EFOBJ
+    pack Gen_Menu_Name_EFOBJ
+    window modify Gen_Menu_Mode_STTXT
+    window modify Gen_Menu_Text_EFOBJ
+    window modify Gen_Menu_Name_EFOBJ
+    window setfocus Gen_Menu_Text_EFOBJ
+    window default Gen_Menu_Keep_PBOBJ
+    return
+!Gen_Menu_Modify_Menu
+    Gen_Menu_Text_EFOBJ = Gen_Menu_List_LBOBJ
+    Gen_Menu_Name_EFOBJ = null
+    Gen_Menu_Menu_RBOBJ = 'Y'
+    window modify Gen_Menu_Menu_RBOBJ
+    goto !Gen_Menu_Modify_Screen
+!Gen_Menu_Modify_Separator
+    Gen_Menu_Text_EFOBJ = null
+    Gen_Menu_Name_EFOBJ = null
+    Gen_Menu_Separator_RBOBJ = 'Y'
+    window modify Gen_Menu_Separator_RBOBJ
+    goto !Gen_Menu_Modify_Screen
+
+//*****************************************
+//* Gen_Menu_Delete_PBOBJ                 *
+//*****************************************
+!Gen_Menu_Delete_PBOBJ
+    Gen_Menu_List_LBOBJ = null
+    window obtain Gen_Menu_List_LBOBJ
+    if  (Gen_Menu_List_LBOBJ = null)
++       message = "Please select an item first"
++       window message error ok
++       return
++   endif
+    message = "Delete, Are You Sure?"
+    window message question yesno
+    if  (!message)
++       return
++   endif
+    window delete Gen_Menu_List_LBOBJ
+    Gen_Menu_List_LBOBJ = "INDEX=1"
+    window select Gen_Menu_List_LBOBJ
+    Gen_Menu_List_LBOBJ = null
+    return
+
+//*****************************************
+//* Gen_Menu_Keep_PBOBJ                   *
+//*****************************************
+!Gen_Menu_Keep_PBOBJ
+    window obtain Gen_Menu_WIN
+    pack Gen_Menu_Text_EFOBJ
+    crush Gen_Menu_Name_EFOBJ
+    if  (!Gen_Menu_Separator_RBOBJ) and (Gen_Menu_Text_EFOBJ = null)
++       message = "Please enter Text"
++       window message error ok
++       window setfocus Gen_Menu_Text_EFOBJ
++       return
++   endif
+    if  (Gen_Menu_Item_RBOBJ) and (Gen_Menu_Name_EFOBJ = null)
++       message = "Please enter a Name"
++       window message error ok
++       window setfocus Gen_Menu_Name_EFOBJ
++       return
++   endif
+    window pointer wait
+    window disable Gen_Menu_List_LBOBJ
+    Gen_Menu_List_LBOBJ = "INDEX"
+    window obtain Gen_Menu_List_LBOBJ
+    Selected = Gen_Menu_List_LBOBJ
+    if  (Selected = 0)
++       Gen_Menu_List_LBOBJ = "COUNT"
++       window obtain Gen_Menu_List_LBOBJ
++       Selected = Gen_Menu_List_LBOBJ
++   endif
+    close Temp error
+    open Temp null
+    Index = 0
+    do  
+        Index ++
+        Gen_Menu_List_LBOBJ = "INDEX=@Index@"
+        window obtain Gen_Menu_List_LBOBJ
+        pack Gen_Menu_List_LBOBJ
+        if  (Gen_Menu_List_LBOBJ != null)
++           call !Gen_Menu_Keep_Proc
+    until (Gen_Menu_List_LBOBJ = null)
+    Gen_Menu_List_LBOBJ = "ALL"
+    window delete Gen_Menu_List_LBOBJ
+    window fileinsert end default Gen_Menu_List_LBOBJ
+    close Temp
+    window enable Gen_Menu_List_LBOBJ
+    if  (Mode = "Insert")
++       Selected ++
++   endif
+    Gen_Menu_List_LBOBJ = "INDEX=@Selected@"
+    window select Gen_Menu_List_LBOBJ
+    Gen_Menu_List_LBOBJ = null
+    window pointer arrow
+    return
+
+!Gen_Menu_Keep_Proc
+    if  (Index != Selected)
++       i:/@Gen_Menu_List_LBOBJ/
++       return
+    if  (Gen_Menu_Separator_RBOBJ)
++       Newline = "                    ------------------------------"
++       goto !Gen_Menu_Keep_Good
++   endif
+    if  (Gen_Menu_Menu_RBOBJ)
++       Newline = Gen_Menu_Text_EFOBJ
++       goto !Gen_Menu_Keep_Good
++   endif
+    Newline = "                    @Gen_Menu_Text_EFOBJ@"
+    size Newline,40
+    Temp = Gen_Misc_Prefix_EFOBJ
+    mix Temp
+    Newline = "@Newline@@Temp@_Main_@Gen_Menu_Name_EFOBJ@_MSOBJ"
+!Gen_Menu_Keep_Good
+    if  (Mode = "Insert")
++       i:/@Gen_Menu_List_LBOBJ/
++       i:/@Newline/
++   else
++       i:/@Newline/
++   endif
+    return
+    
+//***************************************************************************
+//* B-Edit(PM) Navigation Code Generator - Gen_Nav_WIN Actions              *
+//***************************************************************************
+//*****************************************
+//* Gen_Nav_Set_PBOBJ                     *
+//*****************************************
+!Gen_Nav_Set_PBOBJ
+    Gen_Nav_Menus_LBOBJ = "xxx"
+    Gen_Nav_Buttons_LBOBJ = "xxx"
+    window obtain Gen_Nav_WIN
+    call !b200_set_nav
+    return
+
+//*****************************************
+//* Gen_Nav_Delete_PBOBJ                  *
+//*****************************************
+!Gen_Nav_Delete_PBOBJ
+    window obtain Gen_Nav_WIN
+    if  (Gen_Nav_Navigation_LBOBJ = null)
++       message = "Please select a Navigation to delete!"
++       window message warning ok
++       return
++   endif
+    call !b300_delete_nav
+    window delete Gen_Nav_Navigation_LBOBJ
+    return
+
+//*****************************************
+//* Gen_Nav_Unselect_PBOBJ                *
+//*****************************************
+!Gen_Nav_Unselect_PBOBJ
+    Gen_Nav_Menus_LBOBJ = "INDEX"
+    window obtain Gen_Nav_Menus_LBOBJ
+    Gen_Nav_Menus_LBOBJ = "INDEX=@Gen_Nav_Menus_LBOBJ@"
+    window unselect Gen_Nav_Menus_LBOBJ
+    Gen_Nav_Buttons_LBOBJ = "INDEX"
+    window obtain Gen_Nav_Buttons_LBOBJ
+    Gen_Nav_Buttons_LBOBJ = "INDEX=@Gen_Nav_Buttons_LBOBJ@"
+    window unselect Gen_Nav_Buttons_LBOBJ
+    return
+
+//*****************************************
+//* Gen_Nav_Cancel_PBOBJ                  *
+//*****************************************
+!Gen_Nav_Cancel_PBOBJ
+    message = "Cancel, Are You Sure?"
+    window message question yesno
+    if  (message)
++       window close Gen_Nav_WIN
++   endif
+    return
+
+//*****************************************
+//* Gen_Nav_Finished_PBOBJ                *
+//*****************************************
+!Gen_Nav_Finished_PBOBJ
+    Gen_Nav_Menus_LBOBJ = "COUNT"
+    window obtain Gen_Nav_Menus_LBOBJ
+    if  (Gen_Nav_Menus_LBOBJ != '0')
++       message = "All Menu's have not been assigned, Continue?"
++       window message error yesno
++       if  (message = 'NO')
++           return
++   endif
+
+    Gen_Nav_Buttons_LBOBJ = "COUNT"
+    window obtain Gen_Nav_Buttons_LBOBJ
+    if  (Gen_Nav_Buttons_LBOBJ != '0')
++       message = "All Buttons's have not been assigned, Continue?"
++       window message error yesno
++       if  (message = 'NO')
++           return
++   endif
+    write Navfile @Navfile
+    window close Gen_Nav_WIN
+    return
+
+//***************************************************************************
+//* B-Edit(PM) Navigation Code Generator - Gen_Edit_WIN Actions             *
+//***************************************************************************
+//*****************************************
+//* Gen_Edit_Set_PBOBJ                    *
+//*****************************************
+!Gen_Edit_Set_PBOBJ
+    Gen_Edit_Fields_LBOBJ = "COUNT"
+    window obtain Gen_Edit_Fields_LBOBJ
+    if  (Gen_Edit_Fields_LBOBJ = '0')
++       message = "All Fields have been Set"
++       window message warning ok
++       return
++   endif
+    window obtain Gen_Edit_WIN
+    if  (Gen_Edit_Fields_LBOBJ = null)
++       message = "Please select a Field First"
++       return
++   endif
+    Size = Gen_Edit_Size_EFOBJ
+    if  (Size < 1) or (Size > 500)
++       message = "Invalid Size, Please Reenter"
++       window message error ok
++       window setfocus Gen_Edit_Size_EFOBJ
++       return
++   endif
+
+    Newline = null
+    Newline = "TEXT"
+    if  (Gen_Edit_Text_RBOBJ) Newline = "TEXT"
+    if  (Gen_Edit_Numeric_RBOBJ) Newline = "NUMERIC"
+    if  (Gen_Edit_Alpha_RBOBJ) Newline = "ALPHA"
+    if  (Gen_Edit_Upper_RBOBJ) Newline = "UPPER"
+    if  (Gen_Edit_Lower_RBOBJ) Newline = "LOWER"
+    if  (Gen_Edit_Mix_RBOBJ) Newline = "MIX"
+    if  (Gen_Edit_Date_RBOBJ)
++       Newline = "DATE"
++       Gen_Edit_Size_EFOBJ = '10'
++       window modify Gen_Edit_Size_EFOBJ
++   endif
+    if  (Gen_Edit_Currdate_RBOBJ)
++       Newline = "CURRDATE"
++       Gen_Edit_Size_EFOBJ = '10'
++       window modify Gen_Edit_Size_EFOBJ
++   endif
+    if  (Gen_Edit_Dollar_RBOBJ) Newline = "DOLLAR"
+    if  (Gen_Edit_Telephone_RBOBJ)
++       Newline = "TELEPHONE"
++       Gen_Edit_Size_EFOBJ = '14'
++       window modify Gen_Edit_Size_EFOBJ
++   endif
+    if  (Gen_Edit_Zero_RBOBJ) Newline = "ZERO"
+    Newline = "@Newline@,@Gen_Edit_Fields_LBOBJ@,@Gen_Edit_Size_EFOBJ@"
+    file Editfile
+    f;*
+    i:/@Newline/
+    window delete Gen_Edit_Fields_LBOBJ
+    Gen_Edit_Edit_LBOBJ = Newline
+    window insert ascend default Gen_Edit_Edit_LBOBJ
+    Gen_Edit_Fields_LBOBJ = "INDEX=1"
+    window select Gen_Edit_Fields_LBOBJ
+    return
+
+//*****************************************
+//* Gen_Edit_Cancel_PBOBJ                 *
+//*****************************************
+!Gen_Edit_Cancel_PBOBJ
+    message = "Cancel, Are You Sure?"
+    window message question yesno
+    if  (message)
++       window close Gen_Edit_WIN
++   endif
+    return
+
+//*****************************************
+//* Gen_Edit_Finished_PBOBJ               *
+//*****************************************
+!Gen_Edit_Finished_PBOBJ
+    Gen_Edit_Fields_LBOBJ = "COUNT"
+    window obtain Gen_Edit_Fields_LBOBJ
+    if  (Gen_Edit_Fields_LBOBJ != '0')
++       message = "Please assign all Fields!"
++       message = "All Fields's have not been assigned, Continue?"
++       window message error yesno
++       if  (message = 'NO')
++           return
++   endif
+    window pointer wait
+    write Editfile @Editfile
+    window close Gen_Edit_WIN
+//    window disable Gen_Edit_Finished_PBOBJ
+//    window disable Gen_Edit_Cancel_PBOBJ
+//    window disable Gen_Edit_Set_PBOBJ
+//    message = "Begin Generation of @Gen_Misc_Prefix_EFOBJ@.BED Code."
+//    window message info ok
+//    window open Gen_Build_WIN
+//    window center Gen_Build_WIN
+//    window clear Gen_Build_WIN
+//    window disable Gen_Build_Message_EFOBJ
+//    Gen_Build_Message_EFOBJ = "Building B-Edit Navigation for @Gen_Misc_Prefix_EFOBJ@"
+//    window modify Gen_Build_Message_EFOBJ
+//    window close Gen_Build_WIN
+    return
+
+//*****************************************
+//* Gen_Edit_Delete_PBOBJ                 *
+//*****************************************
+!Gen_Edit_Delete_PBOBJ
+    window obtain Gen_Edit_WIN
+    if  (Gen_Edit_Edit_LBOBJ = null)
++       message = "Please select an Edit to delete!"
++       window message warning ok
++       return
++   endif
+    call !b410_delete_edit
+    window delete Gen_Edit_Edit_LBOBJ
+    return
+
+!a130_Gen_Menu_Title_EFOBJ
+    return
+
+!a130_Gen_Menu_Text_EFOBJ
+    window obtain Gen_Menu_Text_EFOBJ
+    scan:/@Gen_Menu_Text_EFOBJ/:/~/
+    if  (!found)
++       Gen_Menu_Text_EFOBJ = "~@Gen_Menu_Text_EFOBJ@"
++       window modify Gen_Menu_Text_EFOBJ
++   endif
+    return
+
+!a130_Gen_Menu_Name_EFOBJ
+    window obtain Gen_Menu_Name_EFOBJ
+    mix Gen_Menu_Name_EFOBJ
+    window modify Gen_Menu_Name_EFOBJ
+    return
+
+!a130_Gen_Edit_Size_EFOBJ
+    window obtain Gen_Edit_Size_EFOBJ
+    if  (!NUMERIC Gen_Edit_Size_EFOBJ)
++       message = "Field Must Be Numeric!"
++       window message error ok
++       window setfocus Gen_Edit_Size_EFOBJ
++       return
++    endif
+    return
+
+!a130_Gen_Misc_Author_EFOBJ
+    window obtain Gen_Misc_Author_EFOBJ
+    mix Gen_Misc_Author_EFOBJ
+    window modify Gen_Misc_Author_EFOBJ
+    return
+ 
+!a130_Gen_Misc_Desc1_EFOBJ
+    window obtain Gen_Misc_Desc1_EFOBJ
+    mix Gen_Misc_Desc1_EFOBJ
+    window modify Gen_Misc_Desc1_EFOBJ
+    return
+ 
+!a130_Gen_Misc_Desc2_EFOBJ
+    window obtain Gen_Misc_Desc2_EFOBJ
+    mix Gen_Misc_Desc2_EFOBJ
+    window modify Gen_Misc_Desc2_EFOBJ
+    return
+ 
+!a130_Gen_Misc_Desc3_EFOBJ
+    window obtain Gen_Misc_Desc3_EFOBJ
+    mix Gen_Misc_Desc3_EFOBJ
+    window modify Gen_Misc_Desc3_EFOBJ
+    return
+ 
+!a130_Gen_Misc_Desc4_EFOBJ
+    window obtain Gen_Misc_Desc4_EFOBJ
+    mix Gen_Misc_Desc4_EFOBJ
+    window modify Gen_Misc_Desc4_EFOBJ
+    return
+ 
+!a130_Gen_Misc_Desc5_EFOBJ
+    window obtain Gen_Misc_Desc5_EFOBJ
+    mix Gen_Misc_Desc5_EFOBJ
+    window modify Gen_Misc_Desc5_EFOBJ
+    return
+ 
+!a130_Gen_Misc_Name_EFOBJ
+    window obtain Gen_Misc_Name_EFOBJ
+    mix Gen_Misc_Name_EFOBJ
+    window modify Gen_Misc_Name_EFOBJ
+    return
+ 
+!a130_Gen_Misc_Prefix_EFOBJ
+    window obtain Gen_Misc_Prefix_EFOBJ
+    if  (Gen_Misc_Prefix_EFOBJ = null) return
+    upper Gen_Misc_Prefix_EFOBJ
+    window modify Gen_Misc_Prefix_EFOBJ
+    Miscfile = "@Gen_Misc_Prefix_EFOBJ@.msc"
+    if  (!exists @Miscfile)
++       goto !a130_Gen_Misc_Prefix_Nomisc
++   endif
+    close Miscfile error
+    open Miscfile @Miscfile
+    b Gen_Misc_Name_EFOBJ = line
+    f Gen_Misc_Author_EFOBJ = line
+    f Gen_Misc_Desc1_EFOBJ = line
+    f Gen_Misc_Desc2_EFOBJ = line
+    f Gen_Misc_Desc3_EFOBJ = line
+    f Gen_Misc_Desc4_EFOBJ = line
+    f Gen_Misc_Desc5_EFOBJ = line
+    window modify Gen_Misc_WIN
+!a130_Gen_Misc_Prefix_Nomisc
+    Winfile = "@Gen_Misc_Prefix_EFOBJ@.WIN"
+    Editfile = "@Gen_Misc_Prefix_EFOBJ@.EDT"
+    Navfile = "@Gen_Misc_Prefix_EFOBJ@.NAV"
+    Bedfile = "@Gen_Misc_Prefix_EFOBJ@.BED"
+    close Winfile error
+    open Winfile @Winfile error call !Gen_Misc_OK_PBOBJ_error return
+
+    Menufile = "@Gen_Misc_Prefix_EFOBJ@.mnu"
+    close Menufile error
+    Nomenu = 'n'
+    open Menufile @Menufile error goto !a130_Gen_Misc_Prefix_Nomenu
+    return
+
+!a130_Gen_Misc_Prefix_Nomenu
+    open Menufile null
+    i:/****************************************/
+    i:/* MENU                                 */
+    i:/****************************************/
+    i:/MENU,~File/
+    i:/-----------------------------/
+    Newline = Gen_Misc_Prefix_EFOBJ
+    mix Newline
+    Newline = "ITEM,@Newline@_Main_Exit_MSOBJ,E~xit"
+    i:/@Newline/
+    write Menufile @Menufile
+    return
+
+//***************************************************************************
+//* B-Edit(PM) Navigation Code Generator - Subroutines                      *
+//***************************************************************************
+//*****************************************
+//* Load the Nav Window List Boxes        *
+//*****************************************
+!b050_load_menu
+    b
+!b050_loop
+    if  (eof) goto !b050_done
+    split:/@line/;4
+    if  (left = "----") goto !b050_separator
+    if  (left = "TITL") goto !b050_title
+    if  (left = "MENU") goto !b050_menu
+    if  (left = "ITEM") goto !b050_item
+!b050_next
+    f
+    goto !b050_loop
+!b050_done
+    return
+!b050_separator
+    Gen_Menu_List_LBOBJ = "                    @line@"
+    window insert end default Gen_Menu_List_LBOBJ
+    goto !b050_next
+!b050_title
+    scan:/@line/:/,/
+    Gen_Menu_Title_EFOBJ = right
+    pack Gen_Menu_Title_EFOBJ
+    window modify Gen_Menu_Title_EFOBJ
+    goto !b050_next
+!b050_menu
+    scan:/@line/:/,/
+    Gen_Menu_List_LBOBJ = right
+    window insert end default Gen_Menu_List_LBOBJ
+    goto !b050_next
+
+!b050_item
+    Gen_Menu_List_LBOBJ = "                    "
+    scan:/@line/:/,/
+    scan:/@right/:/,/
+    Gen_Menu_List_LBOBJ = "@Gen_Menu_List_LBOBJ@@right@"
+    size Gen_Menu_List_LBOBJ,40
+    Gen_Menu_List_LBOBJ = "@Gen_Menu_List_LBOBJ@@left@"
+    window insert end default Gen_Menu_List_LBOBJ
+    goto !b050_next
+
+//*****************************************
+//* Load the Nav Window List Boxes        *
+//*****************************************
+!b100_load_lists
+    window pointer wait
+    window disable Gen_Nav_Menus_LBOBJ
+    window disable Gen_Nav_Buttons_LBOBJ
+    window disable Gen_Nav_Windows_LBOBJ
+    window disable Gen_Nav_Navigation_LBOBJ
+    file Navfile
+    b
+!b100_nav_loop
+    if  (eof)
++       goto !b100_nav_done
++   endif
+    Gen_Nav_Navigation_LBOBJ = line
+    window insert ascend default Gen_Nav_Navigation_LBOBJ
+    f
+    goto !b100_nav_loop
+!b100_nav_done
+    b
+    file Menufile
+    b
+!b100_menu_loop
+    if  (eof)
++       goto !b100_menu_done
++   endif
+    fs:/ITEM,/
+    if  (eof)
++       goto !b100_menu_done
++   endif
+    split:/@line/;5
+    if  (left != "ITEM,")
++       f
++       goto !b100_menu_loop
++   endif
+    scan:/@right/:/,/
+    Gen_Nav_Menus_LBOBJ = left
+    file Navfile
+    b
+    Temp = "MSOBJ,@Gen_Nav_Menus_LBOBJ@"
+    fs:/@Temp/
+    if  (eof)
++       window insert ascend default Gen_Nav_Menus_LBOBJ
++   endif
+    file Menufile
+    f
+    goto !b100_menu_loop
+!b100_menu_done
+    file Winfile
+    b
+!b100_win_loop
+    if  (eof)
++       goto !b100_win_done
++   endif
+    split:/@line/;7
+    if  (left = "WINDOW,")
++       scan:/@right/:/,/
++       Gen_Nav_Windows_LBOBJ = left
++       window insert ascend default Gen_Nav_Windows_LBOBJ
++       f
++       goto !b100_win_loop
++   endif
+    if  (left = "LBOBJ1,")
++       call !b110_list
++       goto !b100_win_loop
++   endif
+    if  (left != "PBOBJ1,")
++       f
++       goto !b100_win_loop
++   endif
+    scan:/@right/:/,/
+    Gen_Nav_Buttons_LBOBJ = left
+    file Navfile
+    b
+    Temp = "BUTTON,@Gen_Nav_Buttons_LBOBJ@"
+    fs:/@Temp@/
+    if  (eof)
++       window insert ascend default Gen_Nav_Buttons_LBOBJ
++   endif
+    file Winfile
+    f
+    goto !b100_win_loop
+!b100_win_done
+    window enable Gen_Nav_Menus_LBOBJ
+    window enable Gen_Nav_Buttons_LBOBJ
+    window enable Gen_Nav_Windows_LBOBJ
+    window enable Gen_Nav_Navigation_LBOBJ
+    window pointer arrow
+    return
+
+!b110_list
+    scan:/@right/:/,/
+    Gen_Nav_Menus_LBOBJ = left
+    file Navfile
+    b
+    Temp = "List,@Gen_Nav_Menus_LBOBJ@"
+    fs:/@Temp/
+    if  (eof)
++       window insert ascend default Gen_Nav_Menus_LBOBJ
++   endif
+    file Winfile
+    f
+    return
+
+//*****************************************
+//* Set the Navigation                    *
+//*****************************************
+!b200_set_nav
+    if  (Gen_Nav_List_RBOBJ) and (Gen_Nav_Menus_LBOBJ = null)
++       message = "Please select a Listbox to assign to a Button!"
++       window message error ok
++       return
++   endif
+    if  (Gen_Nav_List_RBOBJ) and (Gen_Nav_Buttons_LBOBJ = null)
++       message = "Please select a Button to assign a Listbox to!"
++       window message error ok
++       return
++   endif
+    if  (Gen_Nav_List_RBOBJ)
++       Gen_Nav_Navigation_LBOBJ = "List,@Gen_Nav_Menus_LBOBJ@->@Gen_Nav_Buttons_LBOBJ@"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++       window delete Gen_Nav_Menus_LBOBJ
++       goto !b200_menu_select
++   endif
+    if  (Gen_Nav_Menus_LBOBJ = null)
++       goto !b200_window
++   endif
+    if  (Gen_Nav_Exit_RBOBJ)
++       Gen_Nav_Navigation_LBOBJ = "MSOBJ,@Gen_Nav_Menus_LBOBJ@->EXIT"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++       window delete Gen_Nav_Menus_LBOBJ
++       goto !b200_menu_select
++   endif
+    if  (Gen_Nav_None_RBOBJ)
++       Gen_Nav_Navigation_LBOBJ = "MSOBJ,@Gen_Nav_Menus_LBOBJ@->NONE"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++       window delete Gen_Nav_Menus_LBOBJ
++       goto !b200_menu_select
++   endif
+    if  (Gen_Nav_Windows_LBOBJ = null)
++       message = "Please select a Window to associate with the Menu Selection"
++       window message error ok
++       return
++   endif
+    if  (Gen_Nav_Open_RBOBJ)
++       Gen_Nav_Navigation_LBOBJ = "MSOBJ,@Gen_Nav_Menus_LBOBJ@->@Gen_Nav_Windows_LBOBJ@,OPEN"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++   else
++       Gen_Nav_Navigation_LBOBJ = "MSOBJ,@Gen_Nav_Menus_LBOBJ@->@Gen_Nav_Windows_LBOBJ@,CLOSE"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++   endif
+    window delete Gen_Nav_Menus_LBOBJ
+!b200_menu_select
+    Gen_Nav_Menus_LBOBJ = "INDEX=1"
+    window select Gen_Nav_Menus_LBOBJ
+    Gen_Nav_Menus_LBOBJ = null
+    return
+
+!b200_window
+    if  (Gen_Nav_Buttons_LBOBJ = null)
++       goto !b200_done
++   endif
+    if  (Gen_Nav_Exit_RBOBJ)
++       Gen_Nav_Navigation_LBOBJ = "BUTTON,@Gen_Nav_Buttons_LBOBJ@->EXIT"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++       window delete Gen_Nav_Buttons_LBOBJ
++       goto !b200_window_select
++   endif
+    if  (Gen_Nav_None_RBOBJ)
++       Gen_Nav_Navigation_LBOBJ = "BUTTON,@Gen_Nav_Buttons_LBOBJ@->NONE"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++       window delete Gen_Nav_Buttons_LBOBJ
++       goto !b200_window_select
++   endif
+    if  (Gen_Nav_Windows_LBOBJ = null)
++       message = "Please select a Window to associate with the Button"
++       window message error ok
++       return
++   endif
+    if  (Gen_Nav_Open_RBOBJ)
++       Gen_Nav_Navigation_LBOBJ = "BUTTON,@Gen_Nav_Buttons_LBOBJ@->@Gen_Nav_Windows_LBOBJ@,OPEN"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++   else
++       Gen_Nav_Navigation_LBOBJ = "BUTTON,@Gen_Nav_Buttons_LBOBJ@->@Gen_Nav_Windows_LBOBJ@,CLOSE"
++       window insert ascend default Gen_Nav_Navigation_LBOBJ
++       call !b350_add_nav
++   endif
+    window delete Gen_Nav_Buttons_LBOBJ
+!b200_window_select
+    Gen_Nav_Buttons_LBOBJ = "INDEX=1"
+    window select Gen_Nav_Buttons_LBOBJ
+    Gen_Nav_Buttons_LBOBJ = null
+!b200_done
+    return
+
+//*****************************************
+//* Delete Navigation                     *
+//*****************************************
+!b300_delete_nav
+    file Navfile
+    b
+    fs:/@Gen_Nav_Navigation_LBOBJ/
+    if  (eof)
++       message = "Unable to locate @Gen_Nav_Navigation_LBOBJ@ in Navfile"
++       window message error ok
++       write Navfile @Navfile
++       return
++   endif
+    d
+    scan:/@Gen_Nav_Navigation_LBOBJ/:/,/
+    if  (left = "MSOBJ") or (left = "List")
++       goto !b300_menu
++   endif
+    scan:/@right/:/->/
+    Gen_Nav_Buttons_LBOBJ = left
+    window insert ascend default Gen_Nav_Buttons_LBOBJ
+    return
+!b300_menu
+    scan:/@right/:/->/
+    Gen_Nav_Menus_LBOBJ = left
+    window insert ascend default Gen_Nav_Menus_LBOBJ
+    return
+
+//*****************************************
+//* Add to Nav file                       *
+//*****************************************
+!b350_add_nav
+    file Navfile
+    b
+!b350_loop
+    if  (eof)
++       i:/@Gen_Nav_Navigation_LBOBJ/
++       return
++   endif
+    if  (Gen_Nav_Navigation_LBOBJ > line) 
++       ib:/@Gen_Nav_Navigation_LBOBJ/
++       return
++   endif
+    f
+    goto !b350_loop
+
+//*****************************************
+//* Insert Edits                          *
+//*****************************************
+!b400_insert_edits
+    window pointer wait
+    window disable Gen_Edit_Fields_LBOBJ
+    file Editfile
+    b
+!b400_edit_loop
+    if  (eof)
++       goto !b400_edit_done
++   endif
+    Gen_Edit_Edit_LBOBJ = line
+    window insert ascend default Gen_Edit_Edit_LBOBJ
+    f
+    goto !b400_edit_loop
+!b400_edit_done
+    b
+    file Winfile
+    b
+!b400_loop
+    if  (eof)
++       goto !b400_done
++   endif
+    fs:/EFOBJ/
+    if  (eof)
++       goto !b400_done
++   endif
+    split:/@line/;5
+    if  (left != "EFOBJ")
++       f
++       goto !b400_loop
++   endif
+    scan:/@right/:/,/
+    scan:/@right/:/,/
+    Gen_Edit_Fields_LBOBJ = left
+    file Editfile
+    b
+    fs:/@Gen_Edit_Fields_LBOBJ@/
+    if  (eof)
++       window insert ascend default Gen_Edit_Fields_LBOBJ
++   endif 
+    file Winfile
+    f
+    goto !b400_loop
+!b400_done
+    window enable Gen_Edit_Fields_LBOBJ
+    window pointer arrow
+    return
+
+//*****************************************
+//* Delete Edit                           *
+//*****************************************
+!b410_delete_edit
+    file Editfile
+    b
+    fs:/@Gen_Edit_Edit_LBOBJ/
+    if  (eof)
++       message = "Unable to locate @Gen_Edit_Edit_LBOBJ@ in Editfile"
++       window message error ok
++       write Editfile @Editfile
++       return
++   endif
+    d
+    scan:/@Gen_Edit_Edit_LBOBJ/:/,/
+    scan:/@right/:/,/
+    Gen_Edit_Fields_LBOBJ = left
+    window insert ascend default Gen_Edit_Fields_LBOBJ
+    return
+
+//*****************************************
+//* Build the BED Code                    *
+//*****************************************
+!c100_build_bed
+    OldNavfile = "@Gen_Misc_Prefix_EFOBJ@.na2"
+    write Navfile @OldNavfile
+    UpdateBED = 'n'
+    if  (exists @Bedfile)
++       message = "Update the existing @Gen_Misc_Prefix_EFOBJ@.BED file?"
++       window message question yesno
++       UpdateBED = message
++   endif
+    if  (UpdateBED)
++       close Bedfile error
++       open Bedfile @Bedfile
++       goto !c100_MENU
++   endif
+    MainWindow = "B-Edit(PM) Code Generator - Comments"
+    window title MainWindow
+    file Bedfile
+    b
+    d;*
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    Newline = "//* Program   : @Bedfile@"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//* Author    : @Gen_Misc_Author_EFOBJ@"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//* Date      : @date@"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//*             Generated by B-Edit(PM) GEN.BED (Forrest Bentley)"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//* Desc      : @Gen_Misc_Desc1_EFOBJ@"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    if  (Gen_Misc_Desc2_EFOBJ != null)
++       Newline = "//*             @Gen_Misc_Desc2_EFOBJ@"
++       size Newline,70
++       Newline = "@Newline@*"
++       i:/@Newline/
++   endif
+    if  (Gen_Misc_Desc3_EFOBJ != null)
++       Newline = "//*             @Gen_Misc_Desc3_EFOBJ@"
++       size Newline,70
++       Newline = "@Newline@*"
++       i:/@Newline/
++   endif
+    if  (Gen_Misc_Desc4_EFOBJ != null)
++       Newline = "//*             @Gen_Misc_Desc4_EFOBJ@"
++       size Newline,70
++       Newline = "@Newline@*"
++       i:/@Newline/
++   endif
+    if  (Gen_Misc_Desc5_EFOBJ != null)
++       Newline = "//*             @Gen_Misc_Desc5_EFOBJ@"
++       size Newline,70
++       Newline = "@Newline@*"
++       i:/@Newline/
++   endif
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    MainWindow = "B-Edit(PM) Code Generator - Working Storage"
+    window title MainWindow
+    i:" "
+    i:"    //***********************************"
+    i:"    //* Working Storage Variables       *"
+    i:"    //***********************************"
+    i:" "
+    Newline = "    logfile @Gen_Misc_Prefix_EFOBJ@.LOG"
+    i:"@Newline"
+    i:"    string MainWindow"
+    i:"    string Focus"
+    i:" "
+    i:"    //***********************************"
+    i:"    //* Special Actions                 *"
+    i:"    //***********************************"
+    i:" "
+    Newline = /    string WindowInit/
+    size Newline,50
+    Newline = /@Newline@= "call !a100_WindowInit"/
+    i:/@Newline/
+    Newline = /    string WindowWrap/
+    size Newline,50
+    Newline = /@Newline@= "call !a100_WindowWrap"/
+    i:/@Newline/
+    Newline = /    string WindowTimer/
+    size Newline,50
+    Newline = /@Newline@= "call !a100_WindowTimer"/
+    i:/@Newline/
+    Newline = /    string WindowF1/
+    size Newline,50
+    Newline = /@Newline@= "call !a100_WindowF1"/
+    i:/@Newline/
+    Newline = /    string WindowInsert/
+    size Newline,50
+    Newline = /@Newline@= "call !a100_WindowInsert"/
+    i:/@Newline/
+    Newline = /    string WindowDelete/
+    size Newline,50
+    Newline = /@Newline@= "call !a100_WindowDelete"/
+    i:/@Newline/
+    MainWindow = "B-Edit(PM) Code Generator - Menu Selection Actions"
+    window title MainWindow
+    i:" "
+    i:"    //***********************************"
+    i:"    //* Menu Selection Actions          *"
+    i:"    //***********************************"
+    i:"    //     Menu Selection Name                    Action Taken when Selected"
+    i:"    //     --------------------------------       -----------------------------------"
+!c100_MENU
+    file Navfile
+    b
+!c100_menu1_loop
+    if  (eof)
++       goto !c100_menu1_done
++   endif
+    fs:/MSOBJ,/
+    if  (eof)
++       goto !c100_menu1_done
++   endif
+    scan:/@line/:/,/
+    scan:/@right/:/->/
+    Newline = "    string @left@"
+    size Newline,50
+    Newline = /@Newline@= "call !a110_@left@"/
+    file Bedfile
+    if  (UpdateBED)
++       call !d100_Update_Menu
++   else
++       i:/@Newline/
++   endif
+    file Navfile
+    f
+    goto !c100_menu1_loop
+!c100_menu1_done
+    file Bedfile
+    MainWindow = "B-Edit(PM) Code Generator - Button Actions"
+    window title MainWindow
+    if  (UpdateBED)
++       goto !c100_MENU1
++   endif
+    i:" "
+    i:"    //***********************************"
+    i:"    //* Window Button Actions           *"
+    i:"    //***********************************"
+    i:"    //     Menu Button Name                       Action Taken when Pressed"
+    i:"    //     --------------------------------       -----------------------------------"
+!c100_MENU1
+    file Navfile
+    b
+!c100_button1_loop
+    if  (eof)
++       goto !c100_button1_done
++   endif
+    fs:/BUTTON,/
+    if  (eof)
++       goto !c100_button1_done
++   endif
+    scan:/@line/:/,/
+    scan:/@right/:/->/
+    Newline = "    string @left@"
+    size Newline,50
+    Newline = /@Newline@= "call !a120_@left@"/
+    file Bedfile
+    if  (UpdateBED)
++       call !d200_Update_Button
++   else
++       i:/@Newline/
++   endif
+    file Navfile
+    f
+    goto !c100_button1_loop
+!c100_button1_done
+    file Bedfile
+    MainWindow = "B-Edit(PM) Code Generator - Listbox Actions"
+    window title MainWindow
+    if  (UpdateBED)
++       goto !c100_List1
++   endif
+    i:" "
+    i:"    //***********************************"
+    i:"    //* Listbox Double Click Actions    *"
+    i:"    //***********************************"
+    i:"    //     Listbox Name                           Action Taken when Double Clicked"
+    i:"    //     --------------------------------       -----------------------------------"
+!c100_List1
+    file Navfile
+    b
+!c100_List_Loop
+    if  (eof)
++       goto !c100_List_Done
++   endif
+    fs:/List,/
+    if  (eof)
++       goto !c100_List_Done
++   endif
+    scan:/@line/:/,/
+    scan:/@right/:/->/
+    Newline = "    string @left@"
+    Object = left
+    Temp = Newline
+    size Newline,50
+    Newline = /@Newline@= "window push @right@"/
+    file Bedfile
+    if  (UpdateBED)
++       b fs:/@Temp@/
++       if (eof) b fs:/Listbox Double Click Actions/ f;3 goto !c100_Add_List
++   endif
+    if  (UpdateBED)
++       d;2 b;1
++   endif
+!c100_Add_List
+    i:/@Newline/
+    Newline = "    window action @Object@"
+    i:/@Newline/
+    file Navfile
+    f
+    goto !c100_List_Loop
+!c100_List_Done
+    file Bedfile
+    MainWindow = "B-Edit(PM) Code Generator - Field Edits"
+    window title MainWindow
+    if  (UpdateBED)
++       goto !c100_EDIT
+    i:" "
+    i:"    //***********************************"
+    i:"    //* Field Edits                     *"
+    i:"    //***********************************"
+    i:"    //     Window Field Name                      Action Taken when Focus Lost from Field"
+    i:"    //     --------------------------------       ---------------------------------------"
+!c100_EDIT
+    file Editfile
+    b
+!c100_edit1_loop
+    if  (eof)
++       goto !c100_edit1_done
++   endif
+    scan:/@line/:/,/
+    Type = left
+    scan:/@right/:/,/
+    Newline = "    string @left@"
+    size Newline,50
+    Newline = /@Newline@= "call !a130_@left@"/
+    file Bedfile
+    if  (UpdateBED)
++       b
++       fs:/@Newline/
++       if  (eof) b fs:/Field Edits/ f;3 goto !c100_EDIT2
++   endif
+    if  (UpdateBED)
++       b;1 d;4 b;1
++   endif
+
+!c100_EDIT2
+    i:/ /
+    i:/@Newline/
+    Newline = "    window action @left@"
+    i:/@Newline/
+    Newline = "    window edit @left@ @Type@ @right@"
+    i:/@Newline/
+    file Editfile
+    f
+    goto !c100_edit1_loop
+
+!c100_edit1_done
+    file Bedfile
+    MainWindow = "B-Edit(PM) Code Generator - Main Processing"
+    window title MainWindow
+    if  (UpdateBED)
++       goto !c100_MENUb
+    i:" "
+    i:"//******************************************"
+    i:"//* Main Process                           *"
+    i:"//******************************************"
+    i:" "
+    i:"//****Open the Window File"
+    Newline = /    open WindowFile @Gen_Misc_Prefix_EFOBJ@.WIN error print:"Unable to read @Gen_Misc_Prefix_EFOBJ@.WIN" exit/
+    i:/@Newline/
+    i:"//****Open the Main Menu File"
+    Newline = /    open MenuFile @Gen_Misc_Prefix_EFOBJ@.MNU error print:"Unable to read @Gen_Misc_Prefix_EFOBJ@.MNU" exit/
+    i:/@Newline/
+    i:/ /
+    if  (Gen_Misc_Us_RBOBJ)
++       Newline = "    country US"
++   else
++       Newline = "    country EUROPE"
++   endif
+    i:/@Newline/
+    i:"    //*************************"
+    i:"    //* Main Window Loop      *"
+    i:"    //*************************"
+    i:"    window start"
+    i:" "
+//    i:/    print:"Processing Complete./
+    i:/    exit/
+    MainWindow = "B-Edit(PM) Code Generator - System Actions"
+    window title MainWindow
+    i:" "
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    Newline = "//* System PM Action Logic"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    i:" "
+    i:"//******************************************"
+    i:"//* Main Window Initialization Routine     *"
+    i:"//* Process when Application Starts Up     *"
+    i:"//******************************************"
+    i:/!a100_WindowInit/
+    i:"//  trace=log"
+    i:"//  window timer on 1"
+    i:"    return"
+    i:" "
+    i:"//******************************************"
+    i:"//* Main Window Wrapup Routine             *"
+    i:"//* Process when Application Terminates    *"
+    i:"//******************************************"
+    i:/!a100_WindowWrap/
+    i:"    return"
+    i:" "
+    i:"//******************************************"
+    i:"//* Timer Routine                          *"
+    i:"//* Process when Timer Interval Occurs     *"
+    i:"//******************************************"
+    i:/!a100_WindowTimer/
+    i:/    MainWindow = "Title - [@date@ @time@]"/
+    i:/    window title MainWindow/
+    i:"    return"
+    i:" "
+    i:"//******************************************"
+    i:"//* F1 processing                          *"
+    i:"//* Process when F1 Key is Pressed         *"
+    i:"//******************************************"
+    i:/!a100_WindowF1/
+    i:/    window getfocus Focus/
+    subs &
+    Newline = /    message = "F1 pressed in field [@Focus@]"/
+    i:/&Newline/
+    i:/    window message info ok/
+    i:"    return"
+    i:" "
+    i:"//******************************************"
+    i:"//* Insert processing                      *"
+    i:"//* Process when Insert Key is Pressed     *"
+    i:"//******************************************"
+    i:/!a100_WindowInsert/
+    i:/    window getfocus Focus/
+    Newline = /    message = "Insert pressed in field [@Focus@]"/
+    i:/&Newline/
+    i:"//  window message info ok"
+    i:"    return"
+    i:" "
+    i:"//******************************************"
+    i:"//* Delete processing                      *"
+    i:"//* Process when Delete Key is Pressed     *"
+    i:"//******************************************"
+    i:/!a100_WindowDelete/
+    i:/    window getfocus Focus/
+    Newline = /    message = "Delete pressed in field [@Focus@]"/
+    i:/&Newline/
+    i:"//  window message info ok"
+    i:"    return"
+    i:" "
+    subs @
+    MainWindow = "B-Edit(PM) Code Generator - Main Menu Actions"
+    window title MainWindow
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    Newline = "//* Main Menu Actions"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    i:" "
+!c100_MENUb
+    file Navfile
+    b
+!c100_menu2_loop
+    if  (eof)
++       goto !c100_menu2_done
++   endif
+    fs:/MSOBJ,/
+    if  (eof)
++       goto !c100_menu2_done
++   endif
+    Temp = line
+    scan:/@line/:/,/
+    Type = left
+    scan:/@right/:/->/
+    Object = left
+    scan:/@right/:/,/
+    Window = left
+    Action = right
+    file Bedfile
+    Newline = "!a110_@Object@"
+    if  (UpdateBED)
++       beginend begin
++       b fs:/@Newline/
++       beginend off
++       if  (eof) b fs:/Main Menu Actions/ f goto !c100_MENU2
++   endif
+    if  (!UpdateBED)
++       goto !c100_MENU2
++   endif
+    file OldNavfile
+    b
+    fs:/@Temp/
+    if  (!eof)
++       goto !c100_next_menu2
++   endif
+    file Bedfile
+    f
+!c100_MENU_LOOP
+    Temp = line 
+    crush Temp
+    split:/@line/;3
+    if  (left = '//$') d goto !c100_MENU_LOOP
+    split:/@line/;2
+    if  (left = '//') Newline = line else Newline = "//$@line@"
+    r:/@Newline/ 
+    if  (Temp = "return") goto !c100_MENU2c
+    f
+    if  (eof) goto !c100_MENU2c
+    goto !c100_MENU_LOOP
+!c100_MENU2
+    i:/@Newline/
+!c100_MENU2c
+//    i:/ /
+    file Bedfile
+    if  (Window = "NONE")
++       i:/    message = "No processing has been defined for this Selection!"/
++       i:/    window message info ok/
++       i:/    return/
++       i:/ /
++       goto !c100_next_menu2
++   endif
+    if  (Window = "EXIT")
++       i:/    message = "Exit Verification, Are You Sure?"/
++       i:/    window message question yesno/
++       i:/    if  (message)/
++       i:/+       window stop/
++       i:/+   endif/
++       i:/    return/
++       i:/ /
++       goto !c100_next_menu2
++   endif
+    if  (Action = "OPEN")
++       i:/    window pointer wait/
++       Newline = "    window open @Window@ shade"
++       i:/@Newline/
++       Newline = "    window center @Window@"
++       i:/@Newline/
++       Newline = "    window clear @Window@"
++       i:/@Newline/
++       Newline = "    window unshade @Window@"
++       i:/@Newline/
++       i:/    window pointer arrow/
++       i:/    return/
++       i:/ /
++       goto !c100_next_menu2
++   endif
+    Newline = "    window close @Window@"
+    i:/@Newline/
+    i:/    return/
+    i:/ /
+    goto !c100_next_menu2
+!c100_next_menu2
+    file Navfile
+    f
+    goto !c100_menu2_loop
+!c100_menu2_done
+    file Bedfile
+    if  (UpdateBED)
++       goto !c100_BUTTON2
++   endif
+    i:" "
+    file Navfile
+    b
+    MainWindow = "B-Edit(PM) Code Generator - Button Navigation"
+    window title MainWindow
+    file Bedfile
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    Newline = "//* Button Actions"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    i:" "
+!c100_BUTTON2
+    file Navfile
+    b
+!c100_button2_loop
+    if  (eof)
++       goto !c100_button2_done
++   endif
+    fs:/BUTTON,/
+    if  (eof)
++       goto !c100_button2_done
++   endif
+    Temp = line
+    scan:/@line/:/,/
+    Type = left
+    scan:/@right/:/->/
+    Object = left
+    scan:/@right/:/,/
+    Window = left
+    Action = right
+    file Bedfile
+    Newline = "!a120_@Object@"
+    if  (UpdateBED)
++       beginend begin
++       b fs:/@Newline/
++       beginend off
++       if  (eof) b fs:"//* Button Actions" f goto !c100_BUTTON2b
++   endif
+    if  (!UpdateBED)
++       goto !c100_BUTTON2b
++   endif
+    file OldNavfile
+    b
+    fs:/@Temp/
+    if  (!eof)
++       goto !c100_next_button2
++   endif
+    file Bedfile
+    f
+!c100_BUTTON_LOOP
+    Temp = line 
+    crush Temp
+    split:/@line/;3
+    if  (left = '//$') d goto !c100_BUTTON_LOOP
+    split:/@line/;2
+    if  (left = '//') Newline = line else Newline = "//$@line@"
+    r:/@Newline/ 
+    if  (Temp = "return") goto !c100_BUTTON2c
+    f
+    if  (eof) goto !c100_BUTTON2c
+    goto !c100_BUTTON_LOOP
+!c100_BUTTON2b
+    i:/@Newline/
+!c100_BUTTON2c
+//    i:/ /
+    file Bedfile
+    if  (Window = "EXIT") 
++       i:/    message = "Exit Verification, Are You Sure?"/
++       i:/    window message question yesno/
++       i:/    if  (message)/
++       i:/+       window stop/
++       i:/+   endif/
++       i:/    return/
++       i:/ /
++       goto !c100_next_button2
++   endif
+    if  (Action = "OPEN")
++       i:/    window pointer wait/
++       Newline = "    window open @Window@ shade"
++       i:/@Newline/
++       Newline = "    window center @Window@"
++       i:/@Newline/
++       Newline = "    window clear @Window@"
++       i:/@Newline/
++       Newline = "    window unshade @Window@"
++       i:/@Newline/
++       i:/    window pointer arrow/
++       i:/    return/
++       i:/ /
++       goto !c100_next_button2
++   endif
+    if  (Action = "CLOSE") 
++       Newline = "    window obtain @Window@"
++       i:/@Newline/
++       Newline = "    window close @Window@"
++       i:/@Newline/
++       i:/    return/
++       i:/ /
++       goto !c100_next_button2
++   endif
+    i:/    message = "No processing has been defined for this button!"/
+    i:/    window message info ok/
+    i:/    return/
+    i:/ /
+    goto !c100_next_button2
+!c100_next_button2
+    file Navfile
+    f
+    goto !c100_button2_loop
+!c100_button2_done
+    file Editfile
+    b
+    MainWindow = "B-Edit(PM) Code Generator - Edit Processing"
+    window title MainWindow
+    file Bedfile
+    if  (UpdateBED)
++       goto !c100_ENTRY1
++   endif
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    Newline = "//* Entry Field Focus Change Actions"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+!c100_ENTRY1
+    file Editfile
+!c100_edit2_loop
+    if  (eof)
++       goto !c100_edit2_done
++   endif
+    scan:/@line/:/,/
+    Type = left
+    scan:/@right/:/,/
+    file Bedfile
+    Newline = "!a130_@left@"
+    if  (UpdateBED)
++       b 
++       beginend begin
++       fs:/@Newline/
++       beginend off
++       if (eof) b fs:'//* Entry Field Focus Change Actions' f goto !c100_ENTRY2
++   endif
+    if  (UpdateBED)
++       goto !c100_ENTRY3
++   endif
+!c100_ENTRY2
+    i:/ /
+    i:/@Newline/
+    Newline = "    window obtain @left@"
+    i:/@Newline/
+    i:/    return/
+!c100_ENTRY3
+    file Editfile
+    f
+    goto !c100_edit2_loop
+
+!c100_edit2_done
+    if  (UpdateBED) goto !c100_DONE
+    file Bedfile
+    i:" "
+    i:"//*******************************************************"
+    i:"//*      Special Logic"
+    i:"//*******************************************************"
+    i:" "
+!c100_edit2_done2
+    file Bedfile
+    i:/ /
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+    Newline = "//*                    End of Program @Gen_Misc_Prefix_EFOBJ@.BED"
+    size Newline,70
+    Newline = "@Newline@*"
+    i:/@Newline/
+    Newline = "//**********************************************************************************************************"
+    size Newline,71
+    i:/@Newline/
+!c100_DONE
+    file Bedfile
+    if  (Gen_Misc_Us_RBOBJ)
++       Newline = "    country US"
++   else
++       Newline = "    country EUROPE"
++   endif
+    if  (UpdateBED)
++       b fs:/    country / if (eof) b fs:/Main Window Loop/ b;2 goto !c100_COUNTRY
++   endif    
+    if  (UpdateBED) d b;1
+!c100_COUNTRY
+    if  (UpdateBED)
++       i:/@Newline/
++   endif    
+
+    MainWindow = "B-Edit(PM) Code Generator - Write Generated Source"
+    window title MainWindow
+
+    write Bedfile @Bedfile
+    return
+
+!d100_Update_Menu
+    file Bedfile
+    b
+    Temp = "string @left@"
+    fs:/@Temp@/
+    if (!eof) return
+    b fs:/Menu Selection Actions/ if (eof) message = "Unable to locate Menu Selection Actions, TERMINATING" window message stop ok window stop
+    f;3
+    i:/@Newline/
+    return
+
+!d200_Update_Button
+    file Bedfile
+    b
+    Temp = "string @left@"
+    fs:/@Temp@/
+    if (!eof) return
+    b fs:/Window Button Actions/ if (eof) message = "Unable to locate Window Button Actions, TERMINATING" window message stop ok window stop
+    f;3
+    i:/@Newline/
+    return
+    
+//***************************************************************************
+//*                      End of Program Gen.BED                             *
+//***************************************************************************

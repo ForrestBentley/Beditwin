@@ -1,0 +1,103 @@
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Gen_Misc_WIN,87,93,1177,547,B-Edit(PM) Code Generator - Initialization
+STTXT1,Gen_Misc_Prefix_STTXT,120,444,192,24,System Prefix
+EFOBJL,Gen_Misc_Prefix_EFOBJ,321,444,117,15,
+STTXT1,Gen_Misc_Name_STTXT,123,399,183,24,System Name
+EFOBJL,Gen_Misc_Name_EFOBJ,321,399,528,15,
+STTXT1,Gen_Misc_Author_STTXT,210,354,90,24,Author
+EFOBJL,Gen_Misc_Author_EFOBJ,321,354,534,15,
+STTXT1,Gen_Misc_Desc_STTXT,147,309,156,24,Description
+EFOBJL,Gen_Misc_Desc1_EFOBJ,321,309,768,15,
+EFOBJL,Gen_Misc_Desc2_EFOBJ,321,270,768,15,
+EFOBJL,Gen_Misc_Desc3_EFOBJ,321,231,768,15,
+EFOBJL,Gen_Misc_Desc4_EFOBJ,321,192,768,15,
+EFOBJL,Gen_Misc_Desc5_EFOBJ,321,153,768,15,
+RBOBJ1,Gen_Misc_Us_RBOBJ,321,105,300,30,United States
+RBOBJ1,Gen_Misc_Europe_RBOBJ,321,75,300,30,Europe
+PBOBJ1,Gen_Misc_Menu_PBOBJ,30,27,180,39,~Menu
+PBOBJ1,Gen_Misc_Nav_PBOBJ,240,27,180,39,~Navigation
+PBOBJ1,Gen_Misc_Entry_PBOBJ,450,27,180,39,~Entry Fields
+PBOBJ1,Gen_Misc_OK_PBOBJ,660,27,180,39,~Generate
+PBOBJ1,Gen_Misc_Cancel_PBOBJ,870,27,180,39,~Cancel
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Gen_Build_WIN,177,306,931,211,B-Edit(PM) Code Generator - Build
+STTXT1,Gen_Build_Message_STTXT,117,138,741,24,
+EFOBJL,Gen_Build_Message_EFOBJ,45,81,798,15,
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Gen_Nav_WIN,24,60,1273,580,B-Edit(PM) Code Generator - Navigation
+STTXT1,Gen_Nav_Menus_STTXT,45,507,222,24,Menu Selections
+LBOBJ1,Gen_Nav_Menus_LBOBJ,18,336,453,159,
+STTXT1,Gen_Nav_Buttons_STTXT,42,294,186,24,Push Buttons
+LBOBJ1,Gen_Nav_Buttons_LBOBJ,21,78,450,210,
+GBOBJ1,Gen_Nav_Action_GBOBJ,492,324,138,180,Action
+RBOBJ1,Gen_Nav_Open_RBOBJ,510,444,108,30,Open
+RBOBJ1,Gen_Nav_Close_RBOBJ,510,414,108,30,Close
+RBOBJ1,Gen_Nav_Exit_RBOBJ,510,384,90,30,Exit
+RBOBJ1,Gen_Nav_None_RBOBJ,510,357,105,30,None
+RBOBJ1,Gen_Nav_List_RBOBJ,510,327,105,30,List
+STTXT1,Gen_Nav_Windows_STTXT,657,504,147,24,Windows
+LBOBJ1,Gen_Nav_Windows_LBOBJ,642,339,576,153,
+STTXT1,Gen_Nav_Navigation_STTXT,504,297,162,24,Navigation
+LBOBJ1,Gen_Nav_Navigation_LBOBJ,489,81,738,207,
+PBOBJ1,Gen_Nav_Finished_PBOBJ,30,21,150,39,~OK
+PBOBJ1,Gen_Nav_Cancel_PBOBJ,210,21,150,39,~Cancel
+PBOBJ1,Gen_Nav_Set_PBOBJ,390,21,240,39,~Set Navigation
+PBOBJ1,Gen_Nav_Unselect_PBOBJ,660,21,180,39,~Unselect
+PBOBJ1,Gen_Nav_Delete_PBOBJ,870,21,270,39,~Delete Navigation
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Gen_Edit_WIN,30,126,1267,502,B-Edit(PM) Code Generator - Edits
+STTXT1,Gen_Edit_Fields_STTXT,21,420,186,24,Entry Fields
+LBOBJ1,Gen_Edit_Fields_LBOBJ,15,93,480,318,
+STTXT1,Gen_Edit_Size_STTXT,513,426,60,24,Size
+EFOBJL,Gen_Edit_Size_EFOBJ,591,429,66,15,
+RBOBJ1,Gen_Edit_Text_RBOBJ,519,390,96,30,Text
+RBOBJ1,Gen_Edit_Numeric_RBOBJ,519,360,153,30,Numeric
+RBOBJ1,Gen_Edit_Alpha_RBOBJ,519,330,141,30,Alpha
+RBOBJ1,Gen_Edit_Lower_RBOBJ,519,300,165,30,Alphanum
+RBOBJ1,Gen_Edit_Upper_RBOBJ,519,270,153,30,Upper
+RBOBJ1,Gen_Edit_Mix_RBOBJ,519,240,147,30,Mix
+RBOBJ1,Gen_Edit_Date_RBOBJ,519,210,96,30,Date
+RBOBJ1,Gen_Edit_Currdate_RBOBJ,519,180,168,30,Curr Date
+RBOBJ1,Gen_Edit_Dollar_RBOBJ,519,150,213,30,Dollar
+RBOBJ1,Gen_Edit_Telephone_RBOBJ,519,120,201,30,Telephone
+RBOBJ1,Gen_Edit_Zero_RBOBJ,519,90,201,30,Zero
+STTXT1,Gen_Edit_Edit_STTXT,732,420,111,24,Editing
+LBOBJ1,Gen_Edit_Edit_LBOBJ,729,96,492,318,
+PBOBJ1,Gen_Edit_Finished_PBOBJ,30,21,210,39,~OK
+PBOBJ1,Gen_Edit_Cancel_PBOBJ,270,21,210,39,~Cancel
+PBOBJ1,Gen_Edit_Set_PBOBJ,510,21,210,39,~Set Editing
+PBOBJ1,Gen_Edit_Delete_PBOBJ,750,21,210,39,~Delete Edit
+*****************************************************
+*                   W I N D O W                     *
+*****************************************************
+WINDOW,Gen_Menu_WIN,12,63,1297,586,B-Edit(PM) Code Generator - Main Menu Maintenance
+STTXT1,Gen_Menu_Title_STTXT,15,507,132,24,Main Title
+EFOBJL,Gen_Menu_Title_EFOBJ,168,507,975,15,
+STTXT1,Gen_Menu_List_STTXT,15,468,1134,24,Menu                                Text                                 Name
+LBOBJ1,Gen_Menu_List_LBOBJ,9,228,1209,231,
+STTXT1,Gen_Menu_Mode_STTXT,33,132,216,24,Mode - Insert
+GBOBJ1,Gen_Menu_Type_GBOBJ,285,78,198,135,Type
+RBOBJ1,Gen_Menu_Menu_RBOBJ,297,153,126,30,Menu
+RBOBJ1,Gen_Menu_Item_RBOBJ,300,123,96,30,Item
+RBOBJ1,Gen_Menu_Separator_RBOBJ,300,90,168,30,Separator
+STTXT1,Gen_Menu_Text_STTXT,507,168,66,24,Text
+EFOBJL,Gen_Menu_Text_EFOBJ,591,168,375,15,
+STTXT1,Gen_Menu_Name_STTXT,498,114,78,24,Name
+EFOBJR,Gen_Menu_System_EFOBJ,591,105,81,15,
+EFOBJL,Gen_Menu_Main_EFOBJ,687,105,99,15,
+EFOBJL,Gen_Menu_Name_EFOBJ,801,114,312,15,
+EFOBJL,Gen_Menu_Type_EFOBJ,1119,105,114,15,
+PBOBJ1,Gen_Menu_Keep_PBOBJ,840,15,114,39,~Keep
+PBOBJ1,Gen_Menu_OK_PBOBJ,60,15,114,39,~OK
+PBOBJ1,Gen_Menu_Cancel_PBOBJ,186,15,114,39,~Cancel
+PBOBJ1,Gen_Menu_Insert_PBOBJ,381,15,114,39,~Insert
+PBOBJ1,Gen_Menu_Modify_PBOBJ,501,15,114,39,~Modify
+PBOBJ1,Gen_Menu_Delete_PBOBJ,621,15,114,39,~Delete

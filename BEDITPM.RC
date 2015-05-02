@@ -1,0 +1,56 @@
+//#include "os2.h"
+
+//ICON 100 bedit.ico
+//ICON 8000 doc.ico
+//ICON 8001 file.ico
+
+MENU 100
+BEGIN
+    SUBMENU           "Menu1",         101
+    BEGIN
+    END
+    SUBMENU           "Menu2",         102
+    BEGIN
+    END
+    SUBMENU           "Menu3",         103
+    BEGIN
+    END
+    SUBMENU           "Menu4",         104
+    BEGIN
+    END
+    SUBMENU           "Menu5",         105
+    BEGIN
+    END
+    SUBMENU           "Menu6",         106
+    BEGIN
+    END
+    SUBMENU           "Menu7",         107
+    BEGIN
+    END
+    SUBMENU           "Menu8",         108
+    BEGIN
+    END
+    SUBMENU           "Menu9",         109
+    BEGIN
+    END
+    SUBMENU           "Menu10",         110
+    BEGIN
+    END
+    SUBMENU           "Menu11",         111
+    BEGIN
+    END
+    SUBMENU           "Menu12",         112
+    BEGIN
+    END
+    SUBMENU           "Menu13",         113
+    BEGIN
+    END
+    SUBMENU           "Menu14",         114
+    BEGIN
+    END
+    SUBMENU           "Menu15",         115
+    BEGIN
+    END
+
+END
+
